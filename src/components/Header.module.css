@@ -1,0 +1,115 @@
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  width: 100%;
+  padding: var(--header-py) var(--header-px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+}
+
+.revealed {
+  animation: einblenden 0.8s var(--ease-out) 0.15s forwards;
+}
+
+@keyframes einblenden {
+  from {
+    opacity: 0;
+    transform: translate3d(0, calc(18 * var(--u)), 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.logo img {
+  width: var(--logo-w);
+  height: var(--logo-h);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--u));
+}
+
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: calc(4 * var(--u));
+  padding: calc(4 * var(--u));
+  border: 1px solid var(--glas-kante);
+  border-radius: var(--pille);
+  background: var(--pillen-fuellung);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glass {
+  position: absolute;
+  z-index: 0;
+  opacity: 0.92;
+  max-width: none;
+  pointer-events: none;
+}
+
+.link {
+  position: relative;
+  z-index: 1;
+  padding: calc(6 * var(--u)) calc(16 * var(--u));
+  border-radius: var(--pille);
+  font-size: var(--nav-size);
+  line-height: var(--nav-lh);
+}
+
+.active {
+  background: var(--creme);
+  color: var(--tanne);
+}
+
+.menu {
+  display: flex;
+}
+
+.menuLabel {
+  height: var(--control-h);
+  padding: 0 calc(20 * var(--u));
+  border-radius: var(--pille);
+  background: var(--creme);
+  color: var(--tanne);
+  font-size: var(--menu-size);
+  line-height: var(--menu-lh);
+}
+
+.menuRound {
+  width: var(--control-h);
+  height: var(--control-h);
+  border-radius: 50%;
+  background: var(--creme);
+  display: grid;
+  place-items: center;
+}
+
+.menuRound img {
+  width: calc(12 * var(--u));
+  height: calc(12 * var(--u));
+}
+
+@media (max-width: 1023px) {
+  .pill,
+  .menuLabel {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revealed {
+    animation-duration: 0.01ms;
+    animation-delay: 0s;
+  }
+}

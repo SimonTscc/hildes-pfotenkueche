@@ -1,0 +1,128 @@
+.cursor,
+.trail {
+  display: none;
+}
+
+@media (pointer: fine) {
+  .cursor {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .cursor.visible[data-intro="true"] {
+    opacity: 1;
+  }
+
+  .trail {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    pointer-events: none;
+    overflow: hidden;
+  }
+}
+
+.ring,
+.pawWrap,
+.label {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.ring {
+  width: calc(36 * var(--u));
+  height: calc(36 * var(--u));
+  border: 1px solid var(--creme);
+  border-radius: 50%;
+  background: var(--orbit);
+  backdrop-filter: blur(3px);
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.3s var(--ease-out),
+    background 0.3s ease;
+}
+
+.pawWrap {
+  width: calc(14 * var(--u));
+  height: calc(14 * var(--u));
+  transform: translate(-50%, -50%) rotate(var(--angle, 0rad));
+  filter: var(--pfoten-schatten);
+}
+
+.paw {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--creme);
+  mask: url("/pfote.svg") center / contain no-repeat;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.label {
+  top: calc(26 * var(--u));
+  font-size: var(--nav-size);
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%) translateY(calc(-4 * var(--u)));
+  transition:
+    opacity 0.2s ease,
+    transform 0.3s var(--ease-out);
+}
+
+.hover .ring {
+  transform: translate(-50%, -50%) scale(1.16);
+  background: var(--orbit-hover);
+}
+
+.hover .paw {
+  transform: scale(1.25);
+}
+
+.labelled .label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.print {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(14 * var(--u));
+  height: calc(14 * var(--u));
+  background: var(--creme);
+  mask: url("/pfote.svg") center / contain no-repeat;
+  opacity: 0;
+  animation: abdruck 900ms linear forwards;
+  animation-play-state: running;
+}
+
+/* Abdrücke ohne Position bleiben unsichtbar, bis der Cursor sie setzt */
+.print:not([style*="translate3d"]) {
+  animation: none;
+}
+
+@keyframes abdruck {
+  0% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail {
+    display: none;
+  }
+}

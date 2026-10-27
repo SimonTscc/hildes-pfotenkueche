@@ -1,0 +1,82 @@
+.cards {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity, transform;
+}
+
+.card {
+  position: absolute;
+  width: var(--karte-w);
+  border: 1px solid var(--glas-kante);
+  border-radius: var(--karte-radius);
+  background: var(--karten-fuellung);
+  box-shadow: var(--karten-schatten);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--karten-toenung);
+}
+
+.left {
+  left: var(--block-left);
+  top: 22%;
+}
+
+.right {
+  right: var(--block-right);
+  top: 49%;
+}
+
+.glass {
+  position: absolute;
+  z-index: 0;
+  max-width: none;
+  pointer-events: none;
+}
+
+.body {
+  position: relative;
+  z-index: 2;
+  padding: var(--karte-pad);
+}
+
+.title {
+  font-size: var(--karten-titel-size);
+  line-height: var(--karten-titel-lh);
+  margin-bottom: calc(10 * var(--u));
+}
+
+.text {
+  font-size: var(--karten-text-size);
+  line-height: var(--karten-text-lh);
+}
+
+.paw {
+  position: absolute;
+  z-index: 3;
+  top: var(--karte-ecke);
+  right: var(--karte-ecke);
+  width: calc(20 * var(--u));
+  height: calc(20 * var(--u));
+  background: var(--creme);
+  mask: url("/pfote.svg") center / contain no-repeat;
+  opacity: 0.5;
+}
+
+@media (max-width: 1023px) {
+  .left {
+    top: 16%;
+  }
+
+  .right {
+    top: 39%;
+  }
+}
