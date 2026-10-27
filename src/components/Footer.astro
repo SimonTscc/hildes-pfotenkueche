@@ -1,0 +1,88 @@
+---
+import { nav, site } from "../data/site";
+import { href } from "../lib/url";
+import Pfote from "./Pfote.astro";
+---
+<footer class="fuss">
+  <div class="wrap raster">
+    <div>
+      <p class="marke"><Pfote size={20} /> {site.name}</p>
+      <p class="leise">{site.claim}</p>
+    </div>
+    <ul>
+      {nav.map((item) => <li><a href={href(item.href)}>{item.label}</a></li>)}
+      <li><a href={href("anfrage")}>Plan anfragen</a></li>
+    </ul>
+    <div>
+      {site.email ? <a href={`mailto:${site.email}`}>{site.email}</a> : <p class="leise">Kontaktdaten folgen.</p>}
+      {site.instagram && <p><a href={site.instagram} rel="noopener">Instagram</a></p>}
+    </div>
+  </div>
+  <div class="wrap unten">
+    <p>© {new Date().getFullYear()} {site.name}</p>
+    <p><a href={href("impressum")}>Impressum</a> · <a href={href("datenschutz")}>Datenschutz</a></p>
+  </div>
+</footer>
+
+<style>
+  .fuss {
+    background: var(--tanne);
+    color: var(--blatt);
+    padding: 64px 0 28px;
+    margin-top: 0;
+  }
+
+  .raster {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 32px;
+  }
+
+  .marke {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--kopf);
+    font-weight: 750;
+    font-size: 1.3rem;
+    color: var(--kuerbis);
+  }
+
+  .leise {
+    opacity: 0.7;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+
+  a {
+    text-decoration-color: rgba(243, 245, 239, 0.4);
+    text-underline-offset: 3px;
+  }
+
+  .unten {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(243, 245, 239, 0.18);
+    font-size: 0.92rem;
+    opacity: 0.85;
+  }
+
+  @media (max-width: 760px) {
+    .raster {
+      grid-template-columns: 1fr;
+    }
+
+    .unten {
+      flex-direction: column;
+    }
+  }
+</style>

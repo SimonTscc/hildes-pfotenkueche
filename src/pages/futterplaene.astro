@@ -1,0 +1,160 @@
+---
+import Base from "../layouts/Base.astro";
+import Seitenkopf from "../components/Seitenkopf.astro";
+import { plaene } from "../data/angebot";
+import { site } from "../data/site";
+import { href } from "../lib/url";
+import fleisch from "../assets/bilder/fleisch.jpg";
+---
+<Base title="Futterpläne" description="Sieben BARF-Futterpläne für Hunde: Puppy, Adult, Senior, Gesundheit, Gewichtskontrolle, Ausschlussdiät und Darmsanierung.">
+  <Seitenkopf titel="Futterpläne" bild={fleisch} alt="Verschiedene Stücke rohes Fleisch auf hellem Untergrund">
+    <p>Jeder Plan wird für deinen Hund einzeln berechnet: Mengen pro Tag, Rezepte, Einkaufsliste und die passenden Öle und Ergänzungen.</p>
+    <p>{site.priceNote}</p>
+  </Seitenkopf>
+
+  <div class="wrap register">
+    <nav class="reiter" aria-label="Pläne auf dieser Seite">
+      <p>Springe zu</p>
+      <ol>
+        {plaene.map((p) => <li><a href={`#${p.id}`}>{p.name.replace("BARF-Plan ", "")}</a></li>)}
+      </ol>
+    </nav>
+
+    <div class="liste">
+      {plaene.map((p) => (
+        <section id={p.id} class="plan" aria-labelledby={`${p.id}-titel`}>
+          <p class="fuer">{p.fuer}</p>
+          <h2 id={`${p.id}-titel`}>{p.name}</h2>
+          <p class="text">{p.text}</p>
+          <h3 class="sr-only">Darin enthalten</h3>
+          <ul>
+            {p.inhalt.map((i) => <li>{i}</li>)}
+          </ul>
+          <a class="knopf leise" href={href(`anfrage?plan=${p.id}`)}>Diesen Plan anfragen</a>
+        </section>
+      ))}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .register {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: clamp(28px, 5vw, 80px);
+    padding-block: clamp(48px, 7vw, 96px);
+  }
+
+  .reiter {
+    position: sticky;
+    top: 104px;
+    align-self: start;
+  }
+
+  .reiter p {
+    font-weight: 600;
+    color: var(--tanne-hell);
+    margin-bottom: 10px;
+  }
+
+  .reiter ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 3px solid var(--salbei-dunkel);
+  }
+
+  .reiter a {
+    display: block;
+    padding: 7px 14px;
+    margin-left: -3px;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+    font-weight: 550;
+  }
+
+  .reiter a:hover {
+    border-left-color: var(--moehre);
+    color: var(--moehre-dunkel);
+  }
+
+  .plan {
+    padding: 0 0 clamp(40px, 5vw, 64px);
+    margin-bottom: clamp(40px, 5vw, 64px);
+    border-bottom: 1px solid var(--linie);
+    scroll-margin-top: 100px;
+  }
+
+  .plan:last-child {
+    border-bottom: 0;
+  }
+
+  .fuer {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--tanne);
+    color: var(--blatt);
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+    margin-bottom: 16px;
+  }
+
+  .text {
+    font-size: 1.1rem;
+    max-width: 62ch;
+  }
+
+  ul {
+    margin: 20px 0 26px;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  li {
+    padding-left: 26px;
+    position: relative;
+  }
+
+  .plan li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 0.55em;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--moehre);
+  }
+
+  @media (max-width: 860px) {
+    .register {
+      grid-template-columns: 1fr;
+    }
+
+    .reiter {
+      position: static;
+    }
+
+    .reiter ol {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      border: 0;
+    }
+
+    .reiter a {
+      border: 2px solid var(--tanne);
+      border-radius: 6px;
+      margin: 0;
+      padding: 5px 10px;
+    }
+  }
+</style>

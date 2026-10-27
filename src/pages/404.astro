@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import Pfote from "../components/Pfote.astro";
+import { href } from "../lib/url";
+---
+<Base title="Nicht gefunden" description="Diese Seite gibt es nicht.">
+  <section class="wrap leer">
+    <Pfote size={56} />
+    <h1>Hier ist der Napf leer.</h1>
+    <p>Diese Seite gibt es nicht (mehr). Vielleicht findest du auf der Startseite, was du suchst.</p>
+    <a class="knopf" href={href()}>Zur Startseite</a>
+  </section>
+</Base>
+
+<style>
+  .leer {
+    display: grid;
+    justify-items: start;
+    gap: 18px;
+    padding-block: clamp(64px, 10vw, 140px);
+    color: var(--tanne);
+  }
+
+  p {
+    color: var(--tinte);
+    max-width: 48ch;
+  }
+</style>

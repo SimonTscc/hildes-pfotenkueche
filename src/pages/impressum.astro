@@ -1,0 +1,22 @@
+---
+import Base from "../layouts/Base.astro";
+import Rechtliches from "../components/Rechtliches.astro";
+import { bildnachweis } from "../data/bildnachweis";
+import { isPreview, site } from "../data/site";
+---
+<Base title="Impressum" description="Impressum von Hildes Pfotenküche.">
+  <Rechtliches titel="Impressum">
+    {isPreview && <p class="offen">Vorschau: Name, Anschrift und Kontakt werden vor dem Livegang ergänzt.</p>}
+    <h2>Angaben gemäß § 5 DDG</h2>
+    <p>{site.owner}<br />{site.name}<br />{site.street || "Anschrift folgt"}{site.zip && <><br />{site.zip} {site.city}</>}</p>
+    <h2>Kontakt</h2>
+    <p>{site.email ? <a href={`mailto:${site.email}`}>{site.email}</a> : "E-Mail folgt"}</p>
+    <h2>Hinweis</h2>
+    <p>Die Futterpläne und Beratungen ersetzen keine tierärztliche Untersuchung oder Behandlung. Bei Erkrankungen wende dich bitte immer auch an deine Tierarztpraxis.</p>
+    <h2>Bildnachweis</h2>
+    <p>Fotos von Unsplash, genutzt unter der Unsplash-Lizenz:</p>
+    <ul>
+      {bildnachweis.map((b) => <li>{b.motiv}: <a href={b.url} rel="noopener">{b.von}</a></li>)}
+    </ul>
+  </Rechtliches>
+</Base>

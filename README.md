@@ -1,20 +1,12 @@
 # Hildes Pfotenküche
 
-Einseitige Scroll-Website für eine BARF-Ernährungsberaterin: Kamerafahrt über einen Küchentisch (WebGL, 120 Bilder mit Tiefenkarte), Preloader mit Pfotenspur, Glaskarten, Pfoten-Cursor.
+Website für Hildes BARF-Ernährungsberatung (Futterpläne und Beratung für Hunde). Astro, mehrere Seiten, Napf-Rechner auf der Startseite.
 
-- Entwickeln: `npm install`, dann `npm run dev`
-- Bauen: `npm run build` (Basis-Pfad `/hildes-pfotenkueche/` für GitHub Pages)
-- Deploy: automatisch per GitHub Actions bei jedem Push auf `main`
+- Entwickeln: `npm install`, dann `npm run dev` → http://localhost:4321/hildes-pfotenkueche/
+- Prüfen und bauen: `npm run check`, `npm run build`
+- Deploy: automatisch per GitHub Actions auf GitHub Pages bei jedem Push auf `main`
+- Inhalte: `src/data/site.ts` (Kontakt, Vorschau-Schalter), `src/data/angebot.ts` (Pläne, Beratung, Ablauf)
+- Offene Angaben sind mit `[SWAP]` markiert.
+- Fotos: Unsplash, Nachweis in `src/data/bildnachweis.ts` und im Impressum.
 
-## Kamerafahrt neu rendern
-
-Die Bilder in `public/frames/` sind eine prozedurale 3D-Szene (three.js), gerendert mit Chrome:
-
-```
-cd tools/kamerafahrt
-npm install
-npm run render        # alle 120 Bilder + Tiefenkarten nach public/frames
-npm run vorschau      # Szene mit Schieberegler im Browser ansehen
-```
-
-Liefert der Kunde ein echtes Video, ersetzen die Bilder daraus diese Dateien (gleiche Namen, 1920 × 1080 JPEG und 960 × 540 WebP, weiß = nah).
+Der erste Entwurf (Scroll-Website mit WebGL-Kamerafahrt) liegt auf dem Branch `archiv/v1-kamerafahrt` bzw. Tag `v1-kamerafahrt`.

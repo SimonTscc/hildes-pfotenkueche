@@ -1,0 +1,494 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Rechner from "../components/Rechner.astro";
+import Pfote from "../components/Pfote.astro";
+import { ablauf, leistungen, plaene } from "../data/angebot";
+import { site } from "../data/site";
+import { href } from "../lib/url";
+import aussie from "../assets/bilder/aussie-napf.jpg";
+import rohfutter from "../assets/bilder/rohfutter-napf.jpg";
+import husky from "../assets/bilder/husky-fuettern.jpg";
+
+const fragen = [
+  {
+    f: "Was heißt BARF eigentlich?",
+    a: "BARF steht für „biologisch artgerechtes rohes Futter“. Dein Hund bekommt rohes Fleisch, Innereien, Knochen, etwas Gemüse und Obst, so zusammengestellt, dass alle Nährstoffe drin sind.",
+  },
+  {
+    f: "Reicht es nicht, einfach Fleisch zu füttern?",
+    a: "Leider nein. Ohne Knochen fehlt Kalzium, ohne Innereien fehlen Vitamine, und zu viel vom einen bringt anderes durcheinander. Genau dafür ist ein Plan da: Er rechnet die Mengen so aus, dass am Ende alles stimmt.",
+  },
+  {
+    f: "Mein Hund ist krank oder verträgt vieles nicht. Geht BARF trotzdem?",
+    a: "Oft sogar besonders gut, weil du genau weißt, was im Napf landet. Dafür gibt es den BARF-Plan Gesundheit, die Ausschlussdiät und die Darmsanierung. Bei Erkrankungen stimmt sich Hilde gern mit deiner Tierarztpraxis ab.",
+  },
+  {
+    f: "Wie läuft eine Anfrage ab?",
+    a: "Du füllst den Fragebogen aus, Hilde meldet sich bei dir, klärt offene Fragen und rechnet dann deinen Plan. Du bekommst ihn zum Ausdrucken, und wenn etwas nicht passt, wird nachgebessert.",
+  },
+  {
+    f: "Ersetzt der Napf-Rechner einen Futterplan?",
+    a: "Nein. Er zeigt dir, in welcher Größenordnung die Tagesration liegt. Ein Plan berücksichtigt zusätzlich Nährstoffe, Kalzium-Phosphor-Verhältnis, Öle und das, was dein Hund mag oder nicht verträgt.",
+  },
+];
+---
+<Base description="Individuelle BARF-Futterpläne, 1:1-Beratung und Ernährungsanalyse für Hunde. Mit Napf-Rechner für die Tagesration.">
+  <section class="held">
+    <div class="wrap raster">
+      <div class="text">
+        <p class="vorzeile"><Pfote size={18} /> {site.claim}</p>
+        <h1>Was gehört heute in den Napf?</h1>
+        <p class="lead">
+          Hilde rechnet es für deinen Hund aus: mit Mengen, Rezepten und Einkaufsliste. Vom Welpen bis zum Senior, auch
+          bei Allergien oder einem empfindlichen Darm.
+        </p>
+        <div class="aktionen">
+          <a class="knopf" href={href("anfrage")}>Futterplan anfragen</a>
+          <a class="textlink" href="#rechner">Erst mal selbst ausrechnen</a>
+        </div>
+      </div>
+      <figure class="bild">
+        <Image src={aussie} alt="Australian Shepherd hebt die Pfote vor seinem gefüllten Napf" widths={[480, 800, 1200]} sizes="(max-width: 900px) 90vw, 520px" loading="eager" />
+        <figcaption>Wartet schon.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="rechner" class="rechner-block">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Der Napf-Rechner</h2>
+        <p>Stell Gewicht und Alltag deines Hundes ein. Die Waage zeigt, wie viel ungefähr am Tag in den Napf gehört und wie sich das aufteilt.</p>
+      </div>
+      <Rechner />
+    </div>
+  </section>
+
+  <section class="ablauf">
+    <div class="wrap raster">
+      <div class="collage">
+        <Image class="gross" src={rohfutter} alt="Hund frisst rohes BARF aus einem mintgrünen Napf" widths={[600, 1000]} sizes="(max-width: 900px) 92vw, 620px" />
+        <Image class="klein" src={husky} alt="Zwei Hände stellen einem Husky den Napf hin" widths={[400, 700]} sizes="(max-width: 900px) 60vw, 320px" />
+      </div>
+      <div>
+        <h2>So entsteht dein Plan</h2>
+        <ol class="schritte">
+          {ablauf.map((s) => (
+            <li>
+              <h3>{s.titel}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="plaene">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Die Futterpläne</h2>
+        <p>Jeder Plan wird für deinen Hund einzeln berechnet. {site.priceNote}</p>
+      </div>
+      <table>
+        <thead>
+          <tr><th scope="col">Plan</th><th scope="col">Für wen</th><th scope="col"><span class="sr-only">Details</span></th></tr>
+        </thead>
+        <tbody>
+          {plaene.map((p) => (
+            <tr>
+              <th scope="row"><a href={href(`futterplaene#${p.id}`)}>{p.name}</a></th>
+              <td>{p.fuer}</td>
+              <td class="mehr"><a class="textlink" href={href(`futterplaene#${p.id}`)} aria-label={`Mehr zu ${p.name}`}>Mehr dazu</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="beratung">
+    <div class="wrap raster">
+      <div>
+        <h2>Beratung, auch ohne Plan</h2>
+        <p class="lead">Manchmal braucht es keinen ganzen Plan, sondern jemanden, der sich deine Fütterung anschaut und Fragen beantwortet.</p>
+        <a class="knopf hell" href={href("beratung")}>Zur Beratung</a>
+      </div>
+      <dl>
+        {leistungen.map((l) => (
+          <div>
+            <dt>{l.name}</dt>
+            <dd>{l.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="fragen">
+    <div class="wrap schmal">
+      <h2>Was oft gefragt wird</h2>
+      {fragen.map((q) => (
+        <details>
+          <summary>{q.f}</summary>
+          <p>{q.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="schluss">
+    <div class="wrap">
+      <h2>Erzähl Hilde von deinem Hund.</h2>
+      <p>Der Fragebogen dauert etwa zehn Minuten. Danach meldet sich Hilde bei dir.</p>
+      <a class="knopf" href={href("anfrage")}>Zum Fragebogen</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  section {
+    padding-block: clamp(64px, 9vw, 120px);
+  }
+
+  .raster {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .kopfzeile {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px 64px;
+    align-items: end;
+    margin-bottom: 36px;
+  }
+
+  .kopfzeile p {
+    max-width: 52ch;
+  }
+
+  .lead {
+    font-size: 1.2rem;
+    line-height: 1.55;
+    max-width: 46ch;
+  }
+
+  /* Einstieg */
+  .held {
+    padding-top: clamp(40px, 6vw, 80px);
+  }
+
+  .vorzeile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--moehre-dunkel);
+    font-weight: 650;
+    margin-bottom: 18px;
+  }
+
+  .held h1 {
+    margin-bottom: 24px;
+    max-width: 11ch;
+  }
+
+  .aktionen {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: 32px;
+  }
+
+  .bild {
+    margin: 0;
+    position: relative;
+  }
+
+  .bild {
+    justify-self: end;
+    width: min(100%, 480px);
+  }
+
+  .bild :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 40%;
+    border-radius: 220px 220px var(--radius) var(--radius);
+    box-shadow: var(--schatten);
+  }
+
+  /* Möhrenfarbene Fläche versetzt hinter dem Foto */
+  .bild::before {
+    content: "";
+    position: absolute;
+    inset: 28px -22px -22px 28px;
+    border-radius: 220px 220px var(--radius) var(--radius);
+    background: var(--moehre);
+    z-index: -1;
+  }
+
+  figcaption {
+    position: absolute;
+    left: -18px;
+    bottom: 34px;
+    padding: 8px 14px;
+    background: var(--blatt);
+    border-radius: 6px;
+    font-family: var(--kopf);
+    font-weight: 700;
+    transform: rotate(-4deg);
+    box-shadow: var(--schatten);
+  }
+
+  /* Rechner */
+  .rechner-block {
+    background: var(--salbei-dunkel);
+  }
+
+  /* Ablauf */
+  .collage {
+    position: relative;
+    padding-bottom: 18%;
+  }
+
+  .collage :global(.gross) {
+    border-radius: var(--radius);
+    box-shadow: var(--schatten);
+  }
+
+  .collage :global(.klein) {
+    position: absolute;
+    right: -6%;
+    bottom: 0;
+    width: 52%;
+    border-radius: var(--radius);
+    border: 8px solid var(--salbei);
+    box-shadow: var(--schatten);
+  }
+
+  .schritte {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    counter-reset: schritt;
+  }
+
+  .schritte li {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 2px 16px;
+    padding: 16px 0;
+    border-top: 1px solid var(--linie);
+  }
+
+  .schritte li::before {
+    content: "";
+    grid-row: span 2;
+    width: 14px;
+    height: 14px;
+    margin-top: 6px;
+    border-radius: 50%;
+    border: 3px solid var(--moehre);
+  }
+
+  .schritte li:last-child::before {
+    background: var(--moehre);
+  }
+
+  /* Pläne als Tabelle */
+  .plaene {
+    background: var(--blatt);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--tanne-hell);
+    padding: 0 0 10px;
+    border-bottom: 2px solid var(--tanne);
+  }
+
+  tbody th,
+  tbody td {
+    padding: 18px 12px 18px 0;
+    border-bottom: 1px solid var(--linie);
+    text-align: left;
+    vertical-align: baseline;
+  }
+
+  tbody th a {
+    font-family: var(--kopf);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  tbody tr:hover th a {
+    color: var(--moehre-dunkel);
+  }
+
+  .mehr {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* Beratung */
+  .beratung {
+    background: var(--tanne);
+    color: var(--blatt);
+  }
+
+  .beratung .raster {
+    align-items: start;
+  }
+
+  .beratung .lead {
+    margin: 20px 0 30px;
+    opacity: 0.9;
+  }
+
+  .knopf.hell {
+    background: var(--kuerbis);
+    color: var(--tinte);
+    box-shadow: 0 3px 0 #b97a31;
+  }
+
+  dl {
+    margin: 0;
+  }
+
+  dl div {
+    padding: 18px 0;
+    border-top: 1px solid rgba(243, 245, 239, 0.2);
+  }
+
+  dt {
+    font-family: var(--kopf);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--kuerbis);
+  }
+
+  dd {
+    margin: 6px 0 0;
+    opacity: 0.9;
+  }
+
+  /* Fragen */
+  .schmal {
+    max-width: 820px;
+  }
+
+  .fragen h2 {
+    margin-bottom: 28px;
+  }
+
+  details {
+    border-top: 1px solid var(--linie);
+  }
+
+  details:last-of-type {
+    border-bottom: 1px solid var(--linie);
+  }
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    font-family: var(--kopf);
+    font-weight: 650;
+    font-size: 1.15rem;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: "+";
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--moehre-dunkel);
+    transition: transform 0.2s ease;
+  }
+
+  details[open] summary::after {
+    transform: rotate(45deg);
+  }
+
+  details p {
+    padding: 0 0 20px;
+    max-width: 66ch;
+  }
+
+  /* Schluss */
+  .schluss {
+    background: var(--moehre);
+    color: #fff;
+    text-align: center;
+  }
+
+  .schluss p {
+    margin: 14px auto 28px;
+    font-size: 1.15rem;
+  }
+
+  .schluss .knopf {
+    background: var(--tanne);
+    box-shadow: 0 3px 0 #0f1a14;
+  }
+
+  @media (max-width: 900px) {
+    .raster,
+    .kopfzeile {
+      grid-template-columns: 1fr;
+    }
+
+    .bild {
+      justify-self: center;
+      width: min(78%, 400px);
+      margin-right: 22px;
+    }
+
+    .collage {
+      margin-right: 6%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    tbody th,
+    tbody td {
+      display: block;
+      padding: 0;
+      border: 0;
+    }
+
+    tbody td.mehr {
+      display: none;
+    }
+
+    tbody tr {
+      display: block;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--linie);
+    }
+
+    thead {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+import Base from "../layouts/Base.astro";
+import Seitenkopf from "../components/Seitenkopf.astro";
+import { href } from "../lib/url";
+import husky from "../assets/bilder/husky-fuettern.jpg";
+
+// [SWAP] Hildes eigene Geschichte, Ausbildung und ein Foto von ihr (mit Hund) fehlen noch.
+const werte = [
+  { titel: "Ehrlich gerechnet", text: "Ein Plan ist nur so gut wie seine Zahlen. Jede Ration wird nachgerechnet, bevor sie bei dir landet." },
+  { titel: "Alltagstauglich", text: "Rezepte, die sich vorbereiten und einfrieren lassen. Niemand soll jeden Abend eine Stunde in der Küche stehen." },
+  { titel: "Mit der Tierarztpraxis, nicht gegen sie", text: "Bei Erkrankungen gehört die Tierarztpraxis dazu. Hilde stimmt sich gern ab." },
+];
+---
+<Base title="Über Hilde" description="Wer hinter Hildes Pfotenküche steckt und wie Hilde arbeitet.">
+  <Seitenkopf titel="Über Hilde" bild={husky} alt="Zwei Hände stellen einem Husky den Napf hin">
+    <p>Hinter der Pfotenküche steht Hilde: Sie rechnet BARF-Pläne, beantwortet Fragen und begleitet Hundehalter bei der Umstellung auf frisches Futter.</p>
+  </Seitenkopf>
+
+  <section class="wrap werte">
+    <h2>Wie Hilde arbeitet</h2>
+    <dl>
+      {werte.map((w) => (
+        <div>
+          <dt>{w.titel}</dt>
+          <dd>{w.text}</dd>
+        </div>
+      ))}
+    </dl>
+    <a class="knopf" href={href("anfrage")}>Hilde schreiben</a>
+  </section>
+</Base>
+
+<style>
+  .werte {
+    padding-block: clamp(48px, 7vw, 96px);
+  }
+
+  h2 {
+    margin-bottom: 28px;
+  }
+
+  dl {
+    margin: 0 0 36px;
+  }
+
+  dl div {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 10px 48px;
+    padding: 22px 0;
+    border-top: 1px solid var(--linie);
+  }
+
+  dt {
+    font-family: var(--kopf);
+    font-weight: 700;
+    font-size: 1.35rem;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 760px) {
+    dl div {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

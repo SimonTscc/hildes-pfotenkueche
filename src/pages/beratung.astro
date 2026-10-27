@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Seitenkopf from "../components/Seitenkopf.astro";
+import { leistungen } from "../data/angebot";
+import { href } from "../lib/url";
+import golden from "../assets/bilder/golden-kueche.jpg";
+import moehren from "../assets/bilder/moehren.jpg";
+---
+<Base title="Beratung" description="1:1-Beratung, Ernährungsanalyse, Tipps zur Fütterung und der Guide „SOS Durchfall“ für Hunde.">
+  <Seitenkopf titel="Beratung" bild={golden} alt="Golden Retriever sitzt erwartungsvoll in einer Küche">
+    <p>Nicht jede Frage braucht gleich einen ganzen Futterplan. Hier bekommst du Hilfe, wenn du schon barfst, gerade umstellst oder einfach unsicher bist.</p>
+  </Seitenkopf>
+
+  <div class="wrap leistungen">
+    {leistungen.map((l, i) => (
+      <section id={l.id} class:list={["leistung", { gespiegelt: i % 2 === 1 }]} aria-labelledby={`${l.id}-titel`}>
+        <h2 id={`${l.id}-titel`}>{l.name}</h2>
+        <div>
+          <p>{l.text}</p>
+          {l.punkte && (
+            <ul>
+              {l.punkte.map((p) => <li>{p}</li>)}
+            </ul>
+          )}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <section class="band">
+    <div class="wrap raster">
+      <Image src={moehren} alt="Drei Möhren mit Grün auf einem Holztisch" widths={[480, 800]} sizes="(max-width: 860px) 92vw, 480px" />
+      <div>
+        <h2>Lieber gleich ein ganzer Plan?</h2>
+        <p>Wenn du merkst, dass dein Hund mehr braucht als ein paar Tipps, rechnet Hilde dir einen Futterplan, der zu ihm passt.</p>
+        <div class="aktionen">
+          <a class="knopf" href={href("anfrage")}>Beratung oder Plan anfragen</a>
+          <a class="textlink" href={href("futterplaene")}>Die Futterpläne ansehen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .leistungen {
+    padding-block: clamp(40px, 6vw, 88px);
+  }
+
+  .leistung {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 18px clamp(28px, 5vw, 80px);
+    padding: clamp(28px, 4vw, 48px) 0;
+    border-bottom: 1px solid var(--linie);
+    scroll-margin-top: 100px;
+  }
+
+  .leistung h2 {
+    font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  }
+
+  .leistung p {
+    font-size: 1.12rem;
+    max-width: 58ch;
+  }
+
+  ul {
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  li {
+    padding-left: 24px;
+    position: relative;
+  }
+
+  li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 14px;
+    height: 3px;
+    background: var(--moehre);
+  }
+
+  .band {
+    background: var(--tanne);
+    color: var(--blatt);
+    padding-block: clamp(56px, 8vw, 104px);
+  }
+
+  .raster {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .raster :global(img) {
+    border-radius: var(--radius);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .band p {
+    margin: 16px 0 28px;
+    font-size: 1.12rem;
+    max-width: 48ch;
+  }
+
+  .aktionen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 26px;
+    align-items: center;
+  }
+
+  .band .textlink {
+    color: var(--blatt);
+  }
+
+  @media (max-width: 860px) {
+    .leistung,
+    .raster {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

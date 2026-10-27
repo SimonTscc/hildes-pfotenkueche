@@ -1,0 +1,35 @@
+---
+interface Props { titel: string; }
+const { titel } = Astro.props;
+---
+<article class="wrap recht">
+  <h1>{titel}</h1>
+  <slot />
+</article>
+
+<style>
+  .recht {
+    max-width: 780px;
+    padding-block: clamp(40px, 6vw, 88px);
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+    margin-bottom: 28px;
+  }
+
+  .recht :global(h2) {
+    font-size: 1.45rem;
+    margin: 32px 0 10px;
+  }
+
+  .recht :global(p) {
+    margin-bottom: 12px;
+  }
+
+  .recht :global(.offen) {
+    padding: 12px 16px;
+    border-left: 4px solid var(--moehre);
+    background: var(--blatt);
+  }
+</style>

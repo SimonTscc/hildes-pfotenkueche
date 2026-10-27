@@ -1,0 +1,272 @@
+---
+import Base from "../layouts/Base.astro";
+import { leistungen, plaene } from "../data/angebot";
+import { site } from "../data/site";
+import { href } from "../lib/url";
+---
+<Base title="Anfrage" description="Erzähl Hilde von deinem Hund und frag einen BARF-Futterplan oder eine Beratung an.">
+  <div class="wrap seite">
+    <div class="intro">
+      <h1>Erzähl von deinem Hund.</h1>
+      <p>Je mehr Hilde weiß, desto besser passt der Plan. Nimm dir zehn Minuten, Pflichtfelder sind markiert. Hilde meldet sich danach per E-Mail bei dir.</p>
+      <p class="leise">{site.priceNote}</p>
+    </div>
+
+    <form class="bogen" data-anfrage data-ziel={site.formTo} novalidate>
+      <fieldset>
+        <legend>Über dich</legend>
+        <label>Dein Name <span class="pflicht">Pflicht</span><input name="Name" autocomplete="name" required /></label>
+        <label>E-Mail <span class="pflicht">Pflicht</span><input name="E-Mail" type="email" autocomplete="email" required /></label>
+        <label>Telefon (freiwillig)<input name="Telefon" type="tel" autocomplete="tel" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Über deinen Hund</legend>
+        <label>Name<input name="Hund" /></label>
+        <label>Rasse oder Mischung<input name="Rasse" /></label>
+        <div class="zwei">
+          <label>Alter<input name="Alter" placeholder="z. B. 4 Jahre" /></label>
+          <label>Gewicht in kg<input name="Gewicht" inputmode="decimal" data-feld="gewicht" /></label>
+        </div>
+        <label>Lebensphase
+          <select name="Lebensphase" data-feld="phase">
+            <option value="">Bitte wählen</option>
+            <option value="welpe">Welpe</option>
+            <option value="adult">Erwachsen</option>
+            <option value="senior">Senior</option>
+          </select>
+        </label>
+        <label>Wie aktiv ist er?
+          <select name="Aktivität" data-feld="aktiv">
+            <option value="">Bitte wählen</option>
+            <option value="ruhig">Gemütlich</option>
+            <option value="normal">Normal</option>
+            <option value="sport">Sehr aktiv</option>
+          </select>
+        </label>
+        <label class="haken"><input type="checkbox" name="Soll abnehmen" value="ja" data-feld="abnehmen" /> Soll abnehmen</label>
+        <label>Erkrankungen, Allergien, Unverträglichkeiten<textarea name="Gesundheit" rows="3"></textarea></label>
+        <label>Was frisst er heute?<textarea name="Aktuelles Futter" rows="3"></textarea></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Was wünschst du dir?</legend>
+        <label>Angebot
+          <select name="Wunsch" data-feld="plan">
+            <option value="Weiß ich noch nicht">Weiß ich noch nicht</option>
+            <optgroup label="Futterpläne">
+              {plaene.map((p) => <option value={p.name} data-id={p.id}>{p.name}</option>)}
+            </optgroup>
+            <optgroup label="Beratung">
+              {leistungen.map((l) => <option value={l.name} data-id={l.id}>{l.name}</option>)}
+            </optgroup>
+          </select>
+        </label>
+        <label>Noch etwas, das Hilde wissen sollte?<textarea name="Nachricht" rows="4"></textarea></label>
+        <label class="haken">
+          <input type="checkbox" name="Datenschutz" value="zugestimmt" required />
+          <span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden (siehe <a href={href("datenschutz")}>Datenschutz</a>). <span class="pflicht">Pflicht</span></span>
+        </label>
+      </fieldset>
+
+      <div class="absenden">
+        <button class="knopf" type="submit">Anfrage senden</button>
+        <p class="status" role="status" data-status></p>
+      </div>
+    </form>
+  </div>
+</Base>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>("[data-anfrage]")) {
+    const status = form.querySelector<HTMLElement>("[data-status]")!;
+    const params = new URLSearchParams(location.search);
+
+    // Werte aus dem Napf-Rechner bzw. vom gewählten Plan übernehmen
+    const setze = (feld: string, wert: string | null) => {
+      const el = form.querySelector<HTMLInputElement | HTMLSelectElement>(`[data-feld="${feld}"]`);
+      if (!el || !wert) return;
+      if (el instanceof HTMLInputElement && el.type === "checkbox") el.checked = true;
+      else el.value = wert;
+    };
+    setze("gewicht", params.get("gewicht"));
+    setze("phase", params.get("phase"));
+    setze("aktiv", params.get("aktiv"));
+    setze("abnehmen", params.get("abnehmen"));
+    const planId = params.get("plan");
+    if (planId) {
+      const option = form.querySelector<HTMLOptionElement>(`option[data-id="${CSS.escape(planId)}"]`);
+      if (option) option.selected = true;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const ziel = form.dataset.ziel;
+      if (!ziel) {
+        status.textContent = "Das Formular wird freigeschaltet, sobald Hildes Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
+        return;
+      }
+      const daten = Object.fromEntries(new FormData(form).entries());
+      const wunsch = String(daten["Wunsch"] ?? "");
+      status.textContent = "Wird gesendet …";
+      try {
+        const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ziel)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            ...daten,
+            _subject: `Neue Anfrage von ${daten["Name"]}: ${wunsch}`,
+            _replyto: daten["E-Mail"],
+            _template: "box",
+            _captcha: "false",
+          }),
+        });
+        const antwort = await res.json().catch(() => ({}));
+        if (!res.ok || String(antwort.success) !== "true") throw new Error();
+        form.reset();
+        status.textContent = "Danke! Hilde meldet sich bald bei dir.";
+      } catch {
+        status.textContent = "Das hat leider nicht geklappt. Bitte versuch es später noch einmal.";
+      }
+    });
+  }
+</script>
+
+<style>
+  .seite {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 5vw, 80px);
+    padding-block: clamp(40px, 6vw, 88px);
+    align-items: start;
+  }
+
+  .intro {
+    position: sticky;
+    top: 110px;
+    display: grid;
+    gap: 16px;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+  }
+
+  .intro p {
+    font-size: 1.12rem;
+  }
+
+  .leise {
+    color: var(--tanne-hell);
+  }
+
+  .bogen {
+    background: var(--blatt);
+    border-radius: 14px;
+    padding: clamp(22px, 3.5vw, 40px);
+    box-shadow: var(--schatten);
+    display: grid;
+    gap: 28px;
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+
+  legend {
+    font-family: var(--kopf);
+    font-weight: 750;
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+    padding: 0;
+  }
+
+  label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+  }
+
+  .pflicht {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--moehre-dunkel);
+  }
+
+  input:not([type="checkbox"]),
+  select,
+  textarea {
+    font: inherit;
+    font-weight: 400;
+    padding: 11px 12px;
+    border: 2px solid var(--salbei-dunkel);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--tinte);
+    width: 100%;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--moehre);
+  }
+
+  .zwei {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .haken {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-weight: 500;
+  }
+
+  .haken input {
+    width: 20px;
+    height: 20px;
+    margin-top: 3px;
+    flex: none;
+    accent-color: var(--moehre);
+  }
+
+  .absenden {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .status {
+    font-weight: 600;
+    color: var(--tanne);
+  }
+
+  @media (max-width: 860px) {
+    .seite {
+      grid-template-columns: 1fr;
+    }
+
+    .intro {
+      position: static;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .zwei {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

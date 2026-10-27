@@ -1,0 +1,118 @@
+---
+import { nav, site } from "../data/site";
+import { href } from "../lib/url";
+import Pfote from "./Pfote.astro";
+
+const current = Astro.url.pathname.replace(/\/$/, "");
+const isActive = (path: string) => current === href(path).replace(/\/$/, "");
+---
+<header class="kopf">
+  <div class="wrap zeile">
+    <a class="marke" href={href()} aria-label={`${site.name}, Startseite`}>
+      <span class="napf"><Pfote size={18} /></span>
+      <span class="name">Hildes<br />Pfotenküche</span>
+    </a>
+    <nav aria-label="Hauptmenü">
+      <ul>
+        {nav.map((item) => (
+          <li><a href={href(item.href)} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a class="knopf klein" href={href("anfrage")}>Plan anfragen</a>
+  </div>
+</header>
+
+<style>
+  .kopf {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--salbei) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--linie);
+  }
+
+  .zeile {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    min-height: 74px;
+  }
+
+  .marke {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .napf {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--tanne);
+    color: var(--kuerbis);
+  }
+
+  .name {
+    font-family: var(--kopf);
+    font-weight: 750;
+    font-size: 1.02rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  ul {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 550;
+  }
+
+  nav a:hover {
+    background: var(--salbei-dunkel);
+  }
+
+  nav a[aria-current="page"] {
+    box-shadow: inset 0 -3px 0 var(--moehre);
+    border-radius: 0;
+  }
+
+  .klein {
+    padding: 0.6em 1em;
+    font-size: 0.98rem;
+  }
+
+  @media (max-width: 760px) {
+    .zeile {
+      flex-wrap: wrap;
+      gap: 0 12px;
+      padding-block: 10px;
+    }
+
+    nav {
+      order: 3;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    nav a {
+      padding: 8px 10px 8px 0;
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+  }
+</style>
