@@ -1,0 +1,49 @@
+---
+// Strukturierte Daten für Suchmaschinen und KI-Suche: Website, Hilde als Dienstleisterin, ihre Pläne als Leistungen.
+// Adresse, E-Mail und Instagram erscheinen automatisch, sobald sie in site.ts stehen.
+import { getImage } from "astro:assets";
+import { leistungen, plaene } from "../data/angebot";
+import { site } from "../data/site";
+import aussie from "../assets/bilder/aussie-napf.jpg";
+
+const start = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const bild = await getImage({ src: aussie, width: 1200, format: "jpg", quality: 80 });
+
+const dienst: Record<string, unknown> = {
+  "@type": "ProfessionalService",
+  "@id": `${start}#hilde`,
+  name: site.name,
+  description: "Individuelle BARF-Futterpläne und Ernährungsberatung für Hunde, vom Welpen bis zum Senior.",
+  url: start,
+  image: new URL(bild.src, Astro.site).href,
+  knowsAbout: ["BARF", "Rohfütterung", "Hundeernährung", "Ausschlussdiät", "Darmsanierung beim Hund"],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Futterpläne und Beratung",
+    itemListElement: [...plaene, ...leistungen].map((p) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: p.name, description: p.text },
+    })),
+  },
+};
+if (site.city) {
+  dienst.address = {
+    "@type": "PostalAddress",
+    streetAddress: site.street || undefined,
+    postalCode: site.zip || undefined,
+    addressLocality: site.city,
+    addressCountry: "DE",
+  };
+}
+if (site.email) dienst.email = site.email;
+if (site.instagram) dienst.sameAs = [site.instagram];
+
+const daten = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebSite", "@id": `${start}#website`, name: site.name, url: start, inLanguage: "de-DE", publisher: { "@id": `${start}#hilde` } },
+    dienst,
+  ],
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(daten)} />

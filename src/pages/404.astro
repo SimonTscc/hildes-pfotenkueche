@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import Pfote from "../components/Pfote.astro";
 import { href } from "../lib/url";
 ---
-<Base title="Nicht gefunden" description="Diese Seite gibt es nicht.">
+<Base title="Nicht gefunden" description="Diese Seite gibt es nicht." kanonisch={false}>
   <section class="wrap leer">
     <Pfote size={56} />
     <h1>Hier ist der Napf leer.</h1>

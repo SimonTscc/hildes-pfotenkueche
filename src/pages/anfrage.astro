@@ -4,7 +4,7 @@ import { leistungen, plaene } from "../data/angebot";
 import { site } from "../data/site";
 import { href } from "../lib/url";
 ---
-<Base title="Anfrage" description="Erzähl Hilde von deinem Hund und frag einen BARF-Futterplan oder eine Beratung an.">
+<Base title="Anfrage" description="Erzähl Hilde von deinem Hund: Fragebogen in etwa zehn Minuten ausfüllen und einen individuellen BARF-Futterplan oder eine Beratung anfragen.">
   <div class="wrap seite">
     <div class="intro">
       <h1>Erzähl von deinem Hund.</h1>
@@ -12,7 +12,7 @@ import { href } from "../lib/url";
       <p class="leise">{site.priceNote}</p>
     </div>
 
-    <form class="bogen" data-anfrage data-ziel={site.formTo} novalidate>
+    <form class="bogen" data-anfrage data-ziel={site.formTo} data-mail={site.email} novalidate>
       <fieldset>
         <legend>Über dich</legend>
         <label>Dein Name <span class="pflicht">Pflicht</span><input name="Name" autocomplete="name" required /></label>
@@ -80,6 +80,7 @@ import { href } from "../lib/url";
 <script>
   for (const form of document.querySelectorAll<HTMLFormElement>("[data-anfrage]")) {
     const status = form.querySelector<HTMLElement>("[data-status]")!;
+    const knopf = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
     const params = new URLSearchParams(location.search);
 
     // Werte aus Links übernehmen (z. B. ?plan=adult)
@@ -113,6 +114,7 @@ import { href } from "../lib/url";
       const daten = Object.fromEntries(new FormData(form).entries());
       const wunsch = String(daten["Wunsch"] ?? "");
       status.textContent = "Wird gesendet …";
+      knopf.disabled = true;
       try {
         const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ziel)}`, {
           method: "POST",
@@ -130,7 +132,12 @@ import { href } from "../lib/url";
         form.reset();
         status.textContent = "Danke! Hilde meldet sich bald bei dir.";
       } catch {
-        status.textContent = "Das hat leider nicht geklappt. Bitte versuch es später noch einmal.";
+        const mail = form.dataset.mail;
+        status.textContent = mail
+          ? `Das hat leider nicht geklappt. Schreib Hilde gern direkt an ${mail}, deine Angaben sind noch im Formular.`
+          : "Das hat leider nicht geklappt. Deine Angaben sind noch im Formular, bitte versuch es gleich noch einmal.";
+      } finally {
+        knopf.disabled = false;
       }
     });
   }
@@ -217,7 +224,6 @@ import { href } from "../lib/url";
   input:focus,
   select:focus,
   textarea:focus {
-    outline: none;
     border-color: var(--moehre);
   }
 
