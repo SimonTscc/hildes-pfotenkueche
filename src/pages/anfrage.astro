@@ -82,7 +82,7 @@ import { href } from "../lib/url";
     const status = form.querySelector<HTMLElement>("[data-status]")!;
     const params = new URLSearchParams(location.search);
 
-    // Werte aus dem Napf-Rechner bzw. vom gewählten Plan übernehmen
+    // Werte aus Links übernehmen (z. B. ?plan=adult)
     const setze = (feld: string, wert: string | null) => {
       const el = form.querySelector<HTMLInputElement | HTMLSelectElement>(`[data-feld="${feld}"]`);
       if (!el || !wert) return;

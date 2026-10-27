@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import Rechner from "../components/Rechner.astro";
+import NapfSpiel from "../components/NapfSpiel.astro";
 import Pfote from "../components/Pfote.astro";
 import { ablauf, leistungen, plaene } from "../data/angebot";
 import { site } from "../data/site";
@@ -28,12 +28,12 @@ const fragen = [
     a: "Du füllst den Fragebogen aus, Hilde meldet sich bei dir, klärt offene Fragen und rechnet dann deinen Plan. Du bekommst ihn zum Ausdrucken, und wenn etwas nicht passt, wird nachgebessert.",
   },
   {
-    f: "Ersetzt der Napf-Rechner einen Futterplan?",
-    a: "Nein. Er zeigt dir, in welcher Größenordnung die Tagesration liegt. Ein Plan berücksichtigt zusätzlich Nährstoffe, Kalzium-Phosphor-Verhältnis, Öle und das, was dein Hund mag oder nicht verträgt.",
+    f: "Was darf auf keinen Fall in den Napf?",
+    a: "Unter anderem Schokolade, Weintrauben und Rosinen, Zwiebeln und Knoblauch, Avocado, Xylit (Birkenzucker) und gekochte Knochen. Im Zweifel lieber fragen, bevor etwas Neues in den Napf kommt.",
   },
 ];
 ---
-<Base description="Individuelle BARF-Futterpläne, 1:1-Beratung und Ernährungsanalyse für Hunde. Mit Napf-Rechner für die Tagesration.">
+<Base description="Individuelle BARF-Futterpläne, 1:1-Beratung und Ernährungsanalyse für Hunde. Mit Napf zum Selbstbefüllen.">
   <section class="held">
     <div class="wrap raster">
       <div class="text">
@@ -45,7 +45,7 @@ const fragen = [
         </p>
         <div class="aktionen">
           <a class="knopf" href={href("anfrage")}>Futterplan anfragen</a>
-          <a class="textlink" href="#rechner">Erst mal selbst ausrechnen</a>
+          <a class="textlink" href="#napf">Erst mal den Napf füllen</a>
         </div>
       </div>
       <figure class="bild">
@@ -55,13 +55,13 @@ const fragen = [
     </div>
   </section>
 
-  <section id="rechner" class="rechner-block">
+  <section id="napf" class="spiel-block">
     <div class="wrap">
       <div class="kopfzeile">
-        <h2>Der Napf-Rechner</h2>
-        <p>Stell Gewicht und Alltag deines Hundes ein. Die Waage zeigt, wie viel ungefähr am Tag in den Napf gehört und wie sich das aufteilt.</p>
+        <h2>Füll den Napf</h2>
+        <p>Zieh die Zutaten in Hildes Napf. Aber Vorsicht: Nicht alles, was in der Küche liegt, gehört auch in den Hund.</p>
       </div>
-      <Rechner />
+      <NapfSpiel />
     </div>
   </section>
 
@@ -246,8 +246,8 @@ const fragen = [
     box-shadow: var(--schatten);
   }
 
-  /* Rechner */
-  .rechner-block {
+  /* Napf-Spiel */
+  .spiel-block {
     background: var(--salbei-dunkel);
   }
 

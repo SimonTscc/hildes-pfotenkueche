@@ -1,0 +1,89 @@
+---
+// Kleine Zeichnungen der Zutaten, einheitlich mit dunkler Kontur.
+interface Props { id: string; }
+const { id } = Astro.props;
+---
+<svg class="zutat-icon" viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="#22392d" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
+  {id === "muskel" && (
+    <>
+      <path d="M12 30c0-10 10-17 22-17 11 0 18 7 18 15 0 12-11 22-24 22-9 0-16-7-16-20z" fill="#b5483c" />
+      <path d="M20 26c6-5 15-6 22-2" stroke="#f1e3d0" stroke-width="3" />
+      <path d="M18 36c7 3 15 3 23-1" stroke="#f1e3d0" stroke-width="2" opacity=".8" />
+    </>
+  )}
+  {id === "pansen" && (
+    <>
+      <path d="M10 34c0-11 9-18 22-18s22 7 22 18-9 16-22 16-22-5-22-16z" fill="#c4b892" />
+      <path d="M20 28l4 3-4 3m10-8l4 3-4 3m10-6l4 3-4 3M24 40l4 2m8-2l4 2" stroke-width="2" />
+    </>
+  )}
+  {id === "innereien" && (
+    <>
+      <path d="M8 34c2-10 12-14 20-11 4-6 14-8 21-2 7 6 4 17-5 21-9 4-22 4-30 0-5-2-7-5-6-8z" fill="#6a2a25" />
+      <path d="M28 23c2 7 1 14-4 20" stroke="#3a1512" stroke-width="2" />
+      <ellipse cx="42" cy="31" rx="4" ry="2.5" fill="#8d3b34" stroke="none" />
+    </>
+  )}
+  {id === "knochen" && (
+    <>
+      <path d="M17 22a6 6 0 1 1 7-7l17 17a6 6 0 1 1 7 7 6 6 0 1 1-7 7L24 29a6 6 0 1 1-7-7z" fill="#efe7d6" />
+      <path d="M26 24c6 1 11 6 13 12-6 2-13-4-13-12z" fill="#b5483c" />
+    </>
+  )}
+  {id === "gemuese" && (
+    <>
+      <path d="M40 22L14 52c-2 2-5 0-4-3l16-31c2-4 8-5 12-2 3 2 4 4 2 6z" fill="#e46b24" />
+      <path d="M22 34l5 2m-9 7l4 2m10-16l3 2" stroke-width="2" />
+      <path d="M40 22c2-7 7-11 13-11-1 6-5 10-11 12m-2-1c-1-7 1-12 6-15 1 6-1 11-5 14" fill="#6f8f4e" />
+    </>
+  )}
+  {id === "obst" && (
+    <>
+      <path d="M32 22c-6-4-18-2-20 9-2 12 7 23 14 23 3 0 4-1 6-1s3 1 6 1c7 0 16-11 14-23-2-11-14-13-20-9z" fill="#c9cf5a" />
+      <path d="M32 22c0-5 2-9 5-11" />
+      <path d="M34 15c4-4 10-4 12-2-3 4-8 5-12 2z" fill="#6f8f4e" />
+      <path d="M20 32c0-4 2-6 5-7" stroke="#fff" stroke-width="2" opacity=".7" />
+    </>
+  )}
+  {id === "oel" && (
+    <>
+      <path d="M32 9c7 11 15 19 15 29a15 15 0 0 1-30 0c0-10 8-18 15-29z" fill="#e2b23a" />
+      <path d="M25 38c0 4 3 7 7 8" stroke="#fff" stroke-width="2.4" opacity=".8" />
+    </>
+  )}
+  {id === "schokolade" && (
+    <>
+      <rect x="14" y="12" width="34" height="42" rx="3" fill="#6b4630" />
+      <path d="M14 26h34M14 40h34M31 12v42" stroke="#4a2f1f" />
+      <path d="M40 54L48 44V54z" fill="#d8d2c4" />
+    </>
+  )}
+  {id === "trauben" && (
+    <>
+      <path d="M33 14c0-4 3-7 7-7" />
+      {[[26,22],[38,22],[20,32],[32,32],[44,32],[26,42],[38,42],[32,52]].map(([x, y]) => <circle cx={x} cy={y} r="6.5" fill="#7d5a8f" />)}
+      <path d="M34 14c5-3 11-1 13 3-5 2-10 1-13-3z" fill="#6f8f4e" />
+    </>
+  )}
+  {id === "zwiebel" && (
+    <>
+      <path d="M32 14c-4 6-18 12-18 25 0 9 8 15 18 15s18-6 18-15c0-13-14-19-18-25z" fill="#d9b87a" />
+      <path d="M32 14c-6 10-8 24-4 40m4-40c6 10 8 24 4 40" stroke-width="2" />
+      <path d="M30 14c0-3 1-6 2-8 1 2 2 5 2 8" />
+    </>
+  )}
+  {id === "gekocht" && (
+    <>
+      <path d="M17 26a6 6 0 1 1 7-7l17 17a6 6 0 1 1 7 7 6 6 0 1 1-7 7L24 33a6 6 0 1 1-7-7z" fill="#b8915f" />
+      <path d="M44 8c-3 3 3 5 0 9m8-7c-3 3 3 5 0 9" stroke-width="2" />
+    </>
+  )}
+</svg>
+
+<style>
+  .zutat-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>

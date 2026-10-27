@@ -1,0 +1,560 @@
+---
+// Napf-Spiel: Zutaten in den Napf ziehen (oder antippen). Gefährliches springt wieder heraus.
+import { zutaten } from "../data/zutaten";
+import { href } from "../lib/url";
+import ZutatIcon from "./ZutatIcon.astro";
+
+const gute = zutaten.filter((z) => z.gut).length;
+---
+<div class="spiel" data-spiel data-ziel={gute}>
+  <div class="buehne">
+    <div class="napf" data-napf>
+      <svg viewBox="0 0 360 260" aria-hidden="true">
+        <defs>
+          <clipPath id="napf-innen"><ellipse cx="180" cy="104" rx="132" ry="33" /></clipPath>
+          <linearGradient id="napf-glanz" x1="0" x2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity="0" />
+            <stop offset=".22" stop-color="#fff" stop-opacity=".16" />
+            <stop offset=".34" stop-color="#fff" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <ellipse cx="180" cy="238" rx="128" ry="13" fill="#18231d" opacity=".16" />
+        <path d="M30 104c4 60 24 112 66 126 28 8 140 8 168 0 42-14 62-66 66-126z" fill="#22392d" />
+        <path d="M30 104c4 60 24 112 66 126 28 8 140 8 168 0 42-14 62-66 66-126z" fill="url(#napf-glanz)" />
+        <text x="180" y="186" text-anchor="middle" class="gravur">HILDE</text>
+        <ellipse cx="180" cy="104" rx="150" ry="41" fill="#2f4b3c" />
+        <ellipse cx="180" cy="104" rx="132" ry="33" fill="#132019" />
+        <g clip-path="url(#napf-innen)">
+          <ellipse class="futter" data-futter cx="180" cy="190" rx="140" ry="40" fill="#6e2620" />
+          <g data-stuecke></g>
+          <ellipse class="oel" data-oel cx="150" cy="98" rx="60" ry="9" fill="#ffe08a" opacity="0" />
+        </g>
+        <path d="M30 104a150 41 0 0 0 300 0" fill="none" stroke="#3c5a49" stroke-width="4" />
+      </svg>
+      <p class="zaehler"><span data-anzahl>0</span> von {gute} Bausteinen im Napf</p>
+    </div>
+
+    <div class="meldung" role="status" aria-live="polite" data-meldung>
+      <p>Zieh die Zutaten in den Napf oder tipp sie an.</p>
+    </div>
+
+    <div class="fertig" data-fertig hidden>
+      <p class="fertig-titel">Ausgewogen. So sieht ein guter Napf aus.</p>
+      <p>Welche Mengen davon dein Hund braucht, rechnet Hilde für ihn aus.</p>
+      <div class="fertig-aktionen">
+        <a class="knopf" href={href("anfrage")}>Futterplan anfragen</a>
+        <button type="button" class="textlink knopflos" data-leeren>Napf leeren</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="regal">
+    <ul>
+      {zutaten.map((z) => (
+        <li>
+          <button
+            type="button"
+            class="zutat"
+            data-zutat={z.id}
+            data-gut={z.gut ? "1" : "0"}
+            data-farbe={z.farbe}
+            data-name={z.name}
+            data-info={z.info}
+            aria-label={`${z.name} in den Napf`}
+          >
+            <span class="bild"><ZutatIcon id={z.id} /></span>
+            <span class="name">{z.name}</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+    <button type="button" class="textlink knopflos leeren" data-leeren>Napf leeren</button>
+  </div>
+</div>
+
+<script>
+  const SVG = "http://www.w3.org/2000/svg";
+  const MENGE: Record<string, number> = { muskel: 38, pansen: 12, innereien: 9, knochen: 7, gemuese: 12, obst: 5 };
+
+  for (const spiel of document.querySelectorAll<HTMLElement>("[data-spiel]")) {
+    const napf = spiel.querySelector<HTMLElement>("[data-napf]")!;
+    const futter = spiel.querySelector<SVGEllipseElement>("[data-futter]")!;
+    const stuecke = spiel.querySelector<SVGGElement>("[data-stuecke]")!;
+    const oel = spiel.querySelector<SVGEllipseElement>("[data-oel]")!;
+    const meldung = spiel.querySelector<HTMLElement>("[data-meldung]")!;
+    const fertig = spiel.querySelector<HTMLElement>("[data-fertig]")!;
+    const anzahl = spiel.querySelector<HTMLElement>("[data-anzahl]")!;
+    const ziel = Number(spiel.dataset.ziel);
+    const drin = new Set<string>();
+    const reduziert = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const melden = (text: string, art: "gut" | "schlecht" | "" = "") => {
+      meldung.className = `meldung ${art}`;
+      meldung.innerHTML = "";
+      const p = document.createElement("p");
+      p.textContent = text;
+      meldung.append(p);
+    };
+
+    const anstossen = (el: Element, klasse: string) => {
+      el.classList.remove(klasse);
+      void (el as HTMLElement).offsetWidth;
+      el.classList.add(klasse);
+    };
+
+    /** Füllstand: Futteroberfläche steigt mit jedem Baustein. */
+    const fuellen = () => {
+      const stand = drin.size / ziel;
+      // leer: Futterfläche liegt unterhalb der Öffnung und ist nicht zu sehen
+      futter.style.setProperty("cy", `${stand === 0 ? 190 : 144 - stand * 40}px`);
+      stuecke.style.transform = `translateY(${(1 - stand) * 18}px)`;
+      anzahl.textContent = String(drin.size);
+    };
+
+    const stueckeStreuen = (farbe: string, menge: number, groesse = 1) => {
+      for (let i = 0; i < menge; i++) {
+        // zufälliger Punkt in der Napföffnung
+        const a = Math.random() * Math.PI * 2;
+        const d = Math.sqrt(Math.random());
+        const x = 180 + Math.cos(a) * d * 118;
+        const y = 104 + Math.sin(a) * d * 26;
+        const r = (5 + Math.random() * 7) * groesse;
+        const el = document.createElementNS(SVG, "ellipse");
+        el.setAttribute("cx", String(x));
+        el.setAttribute("cy", String(y));
+        el.setAttribute("rx", String(r));
+        el.setAttribute("ry", String(r * (0.45 + Math.random() * 0.3)));
+        el.setAttribute("fill", farbe);
+        el.setAttribute("stroke", "rgba(20,12,8,.35)");
+        el.setAttribute("stroke-width", "1");
+        el.setAttribute("transform", `rotate(${Math.random() * 60 - 30} ${x} ${y})`);
+        el.classList.add("stueck");
+        el.style.animationDelay = `${i * 25}ms`;
+        stuecke.append(el);
+      }
+    };
+
+    const hinein = (knopf: HTMLButtonElement) => {
+      const { zutat: id = "", gut, farbe = "#888", name = "", info = "" } = knopf.dataset;
+      if (gut !== "1") {
+        anstossen(napf, "schuettelt");
+        anstossen(knopf, "nein");
+        melden(`${name}? Lieber nicht. ${info}`, "schlecht");
+        return;
+      }
+      if (drin.has(id)) {
+        melden(`${name} ist schon drin.`);
+        return;
+      }
+      drin.add(id);
+      knopf.classList.add("drin");
+      knopf.setAttribute("aria-pressed", "true");
+      if (id === "oel") oel.setAttribute("opacity", ".35");
+      // Stückzahl grob nach BARF-Anteilen: viel Fleisch, wenig Obst und Knochen
+      else stueckeStreuen(farbe, MENGE[id] ?? 10, id === "muskel" ? 1.2 : 0.75);
+      fuellen();
+      anstossen(napf, "plumps");
+      if (drin.size === ziel) {
+        melden("Alles drin, was reingehört.", "gut");
+        fertig.hidden = false;
+        anstossen(napf, "freut");
+      } else {
+        melden(`${name}: ${info}`, "gut");
+      }
+    };
+
+    const leeren = () => {
+      drin.clear();
+      stuecke.replaceChildren();
+      oel.setAttribute("opacity", "0");
+      fertig.hidden = true;
+      for (const k of spiel.querySelectorAll<HTMLButtonElement>("[data-zutat]")) {
+        k.classList.remove("drin");
+        k.removeAttribute("aria-pressed");
+      }
+      fuellen();
+      melden("Napf ist leer. Neuer Versuch!");
+    };
+    for (const b of spiel.querySelectorAll("[data-leeren]")) b.addEventListener("click", leeren);
+
+    /** Fliegendes Abbild der Zutat, folgt dem Finger bzw. fliegt in den Napf. */
+    const geist = (knopf: HTMLButtonElement) => {
+      const bild = knopf.querySelector(".bild")!;
+      const r = bild.getBoundingClientRect();
+      const g = bild.cloneNode(true) as HTMLElement;
+      g.className = "geist";
+      Object.assign(g.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px` });
+      document.body.append(g);
+      return { g, r };
+    };
+
+    const ueberNapf = (x: number, y: number) => {
+      const r = napf.getBoundingClientRect();
+      return x > r.left && x < r.right && y > r.top && y < r.bottom;
+    };
+
+    for (const knopf of spiel.querySelectorAll<HTMLButtonElement>("[data-zutat]")) {
+      let start: { x: number; y: number } | null = null;
+      let zieht: ReturnType<typeof geist> | null = null;
+      let klickSperre = false;
+
+      knopf.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0) return;
+        start = { x: e.clientX, y: e.clientY };
+        knopf.setPointerCapture(e.pointerId);
+      });
+
+      knopf.addEventListener("pointermove", (e) => {
+        if (!start) return;
+        const dx = e.clientX - start.x,
+          dy = e.clientY - start.y;
+        if (!zieht && Math.hypot(dx, dy) > 6) {
+          zieht = geist(knopf);
+          knopf.classList.add("gezogen");
+        }
+        if (zieht) {
+          zieht.g.style.transform = `translate(${dx}px, ${dy}px) rotate(${dx * 0.05}deg) scale(1.1)`;
+          napf.classList.toggle("ziel", ueberNapf(e.clientX, e.clientY));
+        }
+      });
+
+      const ende = (e: PointerEvent) => {
+        if (!start) return;
+        start = null;
+        if (!zieht) return;
+        const { g } = zieht;
+        zieht = null;
+        klickSperre = true;
+        knopf.classList.remove("gezogen");
+        const treffer = ueberNapf(e.clientX, e.clientY);
+        napf.classList.remove("ziel");
+        if (treffer) {
+          g.remove();
+          hinein(knopf);
+        } else {
+          g.style.transition = "transform .3s ease";
+          g.style.transform = "none";
+          setTimeout(() => g.remove(), 300);
+        }
+      };
+      knopf.addEventListener("pointerup", ende);
+      knopf.addEventListener("pointercancel", ende);
+
+      // Antippen oder Tastatur: Zutat fliegt in den Napf
+      knopf.addEventListener("click", () => {
+        if (klickSperre) {
+          klickSperre = false;
+          return;
+        }
+        if (reduziert || knopf.classList.contains("drin")) return hinein(knopf);
+        const { g, r } = geist(knopf);
+        const n = napf.getBoundingClientRect();
+        const dx = n.left + n.width / 2 - (r.left + r.width / 2);
+        const dy = n.top + n.height * 0.35 - (r.top + r.height / 2);
+        g.style.transition = "transform .45s cubic-bezier(.5,-0.3,.6,1)";
+        requestAnimationFrame(() => (g.style.transform = `translate(${dx}px, ${dy}px) scale(.6) rotate(25deg)`));
+        setTimeout(() => {
+          g.remove();
+          hinein(knopf);
+        }, 450);
+      });
+    }
+
+    fuellen();
+  }
+</script>
+
+<style>
+  .spiel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+
+  .buehne {
+    position: sticky;
+    top: 100px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .napf {
+    position: relative;
+    padding: 12px 8px 0;
+    border-radius: 18px;
+    transition: background 0.2s ease;
+  }
+
+  .napf.ziel {
+    background: rgba(228, 107, 36, 0.14);
+    outline: 3px dashed var(--moehre);
+    outline-offset: -3px;
+  }
+
+  .napf svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .gravur {
+    font-family: var(--kopf);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.3em;
+    fill: rgba(243, 245, 239, 0.32);
+  }
+
+  .futter,
+  [data-stuecke] {
+    transition:
+      cy 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .oel {
+    transition: opacity 0.6s ease;
+  }
+
+  :global(.stueck) {
+    animation: reinfallen 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes reinfallen {
+    from {
+      opacity: 0;
+      translate: 0 -30px;
+    }
+  }
+
+  .napf.plumps svg {
+    animation: plumps 0.35s ease;
+  }
+
+  .napf.schuettelt svg {
+    animation: schuetteln 0.45s ease;
+  }
+
+  .napf.freut svg {
+    animation: freut 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes plumps {
+    40% {
+      transform: translateY(5px) scaleY(0.98);
+    }
+  }
+
+  @keyframes schuetteln {
+    20%, 60% {
+      transform: translateX(-8px) rotate(-2deg);
+    }
+    40%, 80% {
+      transform: translateX(8px) rotate(2deg);
+    }
+  }
+
+  @keyframes freut {
+    30% {
+      transform: translateY(-14px) rotate(-3deg);
+    }
+    60% {
+      transform: translateY(0) rotate(2deg);
+    }
+  }
+
+  .zaehler {
+    text-align: center;
+    font-weight: 600;
+    color: var(--tanne-hell);
+    margin-top: 6px;
+  }
+
+  .meldung {
+    min-height: 3.4em;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--blatt);
+    border-left: 4px solid var(--salbei-dunkel);
+  }
+
+  .meldung.gut {
+    border-left-color: var(--gruen);
+  }
+
+  .meldung.schlecht {
+    border-left-color: var(--fleisch);
+    background: #f6e6e2;
+  }
+
+  .fertig {
+    padding: 20px;
+    border-radius: 10px;
+    background: var(--tanne);
+    color: var(--blatt);
+    display: grid;
+    gap: 8px;
+  }
+
+  .fertig[hidden] {
+    display: none;
+  }
+
+  .fertig-titel {
+    font-family: var(--kopf);
+    font-weight: 750;
+    font-size: 1.35rem;
+    color: var(--kuerbis);
+  }
+
+  .fertig-aktionen {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .fertig .textlink {
+    color: var(--blatt);
+  }
+
+  .knopflos {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .regal ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .zutat {
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    padding: 14px 8px 12px;
+    background: var(--blatt);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    box-shadow: 0 3px 0 var(--salbei-dunkel);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.92rem;
+    line-height: 1.2;
+    hyphens: auto;
+    color: var(--tinte);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      opacity 0.2s ease;
+  }
+
+  .zutat:hover {
+    transform: translateY(-2px) rotate(-1deg);
+    border-color: var(--salbei-dunkel);
+  }
+
+  .zutat .bild {
+    width: 54px;
+    height: 54px;
+  }
+
+  .zutat.gezogen {
+    opacity: 0.35;
+  }
+
+  .zutat.drin {
+    opacity: 0.45;
+    box-shadow: none;
+    background: transparent;
+    border: 2px dashed var(--salbei-dunkel);
+    cursor: default;
+  }
+
+  .zutat.drin .name::after {
+    content: " ✓";
+    color: var(--gruen);
+  }
+
+  .zutat.nein {
+    animation: nein 0.4s ease;
+    border-color: var(--fleisch);
+  }
+
+  @keyframes nein {
+    25% {
+      transform: translateX(-5px);
+    }
+    75% {
+      transform: translateX(5px);
+    }
+  }
+
+  .leeren {
+    margin-top: 18px;
+  }
+
+  :global(.geist) {
+    position: fixed;
+    z-index: 50;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 12px rgba(24, 35, 29, 0.3));
+  }
+
+  @media (max-width: 860px) {
+    .spiel {
+      grid-template-columns: 1fr;
+    }
+
+    .buehne {
+      position: static;
+    }
+
+    /* Napf und Regal sollen auf dem Handy zusammen auf den Bildschirm passen */
+    .napf {
+      max-width: 340px;
+      margin-inline: auto;
+      width: 100%;
+    }
+
+    .regal ul {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .zutat {
+      font-size: 0.8rem;
+      padding: 10px 4px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .regal ul {
+      gap: 8px;
+    }
+
+    .zutat {
+      font-size: 0.8rem;
+      padding: 10px 4px;
+    }
+
+    .zutat .bild {
+      width: 44px;
+      height: 44px;
+    }
+  }
+</style>
