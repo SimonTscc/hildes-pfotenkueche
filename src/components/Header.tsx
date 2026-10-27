@@ -3,7 +3,7 @@ import styles from "./Header.module.css";
 
 const LINKS = [
   { label: "Über Hilde", href: "#ueber", active: true },
-  { label: "Sortiment", href: "#sortiment" },
+  { label: "Ernährungspläne", href: "#plaene" },
   { label: "Beratung", href: "#beratung" },
 ];
 

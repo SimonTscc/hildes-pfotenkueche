@@ -1,4 +1,4 @@
-export const FRAME_COUNT = 120;
+export const FRAME_COUNT = 240;
 export const FRAME_URL = (i: number) => `${import.meta.env.BASE_URL}frames/kueche-${String(i).padStart(3, "0")}.jpg`;
 export const DEPTH_URL = (i: number) => `${import.meta.env.BASE_URL}frames/tiefe-${String(i).padStart(3, "0")}.webp`;
 export const FRAME_ASPECT = 1920 / 1080;

@@ -209,11 +209,18 @@ export default function App() {
 
       // Szene (M4)
       progress = damp(progress, target, SCROLL_SMOOTHING, dt);
-      const index = Math.round(progress * (FRAME_COUNT - 1));
+      // zwischen den zwei Nachbarbildern überblenden statt auf das nächste zu springen
+      const exact = progress * (FRAME_COUNT - 1);
+      const index = Math.floor(exact);
+      const next = Math.min(index + 1, FRAME_COUNT - 1);
       sequence.request(index);
+      sequence.request(next);
+      sequence.warm(index);
       pointerX = reduced ? 0 : damp(pointerX, pointerTX, POINTER_SMOOTHING, dt);
       pointerY = reduced ? 0 : damp(pointerY, pointerTY, POINTER_SMOOTHING, dt);
-      const drawn = scene?.draw(sequence.nearest(index)?.frame ?? null, pointerX, pointerY);
+      const frameA = sequence.nearest(index)?.frame ?? null;
+      const frameB = sequence.frames[next];
+      const drawn = scene?.draw(frameA, frameB, exact - index, pointerX, pointerY);
 
       // Textblöcke und Karten
       applyState(hero, progress, TIMING.hero);
@@ -273,15 +280,15 @@ export default function App() {
               intro={introStarted}
               line1="Frisch. Roh. Artgerecht."
               line2="Mit Liebe gebarft."
-              text="Ausgewogene BARF-Menüs für Hunde und Katzen – aus ausgesuchten Zutaten, schonend tiefgekühlt und direkt zu dir nach Hause."
-              button="Jetzt entdecken"
+              text="Hilde erstellt individuelle BARF-Ernährungspläne für Hunde und Katzen – damit du genau weißt, was in den Napf gehört."
+              button="Plan anfragen"
             />
             <CopyState
               ref={midRef}
               variant="mid"
               line1="Ausgewogen gebarft."
-              line2="Von Hand portioniert."
-              text="Fleisch, Innereien, Gemüse und Öle im richtigen Verhältnis – abgestimmt auf Alter, Größe und Bedürfnisse deines Tieres."
+              line2="Genau berechnet."
+              text="Fleisch, Innereien, Knochen, Gemüse und Öle im richtigen Verhältnis – berechnet für Alter, Größe, Aktivität und Bedürfnisse deines Tieres."
             />
             <CopyState
               ref={finalRef}

@@ -8,6 +8,11 @@
   justify-content: space-between;
   align-items: end;
   will-change: opacity, transform;
+  text-shadow: var(--text-schatten);
+}
+
+.button {
+  text-shadow: none;
 }
 
 .mid,

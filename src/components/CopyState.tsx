@@ -39,7 +39,7 @@ export const CopyState = forwardRef<HTMLElement, Props>(function CopyState(
       <div data-detail className={styles.detail}>
         <p className={styles.text}>{text}</p>
         {button && (
-          <a href="#sortiment" className={styles.button} data-cursor-label="Schnuppern">
+          <a href="#beratung" className={styles.button} data-cursor-label="Schnuppern">
             {button}
             <img src={`${import.meta.env.BASE_URL}pfote.svg`} alt="" width={16} height={16} className={styles.paw} />
           </a>

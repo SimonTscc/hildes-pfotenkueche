@@ -4,13 +4,13 @@ import styles from "./GlassCards.module.css";
 
 const CARDS = [
   {
-    title: "BARF-Menüs",
-    text: "Fertig gemischte Komplettmenüs mit Rind, Pute, Lamm oder Pferd – einfach auftauen und füttern.",
+    title: "Dein Futterplan",
+    text: "Ein Plan mit Mengen und Rezepten für jede Woche – du kaufst ein und bereitest selbst zu.",
     side: "left",
   },
   {
     title: "Persönliche Beratung",
-    text: "Hilde stellt mit dir den passenden Futterplan zusammen – auch für Allergiker und Senioren.",
+    text: "Hilde bespricht mit dir Gewohnheiten, Allergien und Ziele – auch für Senioren und empfindliche Mägen.",
     side: "right",
   },
 ] as const;

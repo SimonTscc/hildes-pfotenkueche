@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { MarchingCubes } from "three/examples/jsm/objects/MarchingCubes.js";
 
-const FRAMES = 120;
+const FRAMES = 240;
 
 // ---------- Zufall und Rauschen ----------
 let seed = 7;
@@ -757,7 +757,7 @@ window.renderFrame = (i, mode) => {
   render(i, mode);
   return mode === "depth"
     ? renderer.domElement.toDataURL("image/webp", 0.9)
-    : renderer.domElement.toDataURL("image/jpeg", 0.82);
+    : renderer.domElement.toDataURL("image/jpeg", 0.78);
 };
 
 // Vorschau im Browser

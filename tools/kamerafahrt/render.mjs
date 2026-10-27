@@ -1,5 +1,5 @@
 // Rendert die Kamerafahrt in ../../public/frames (oder in den als Argument übergebenen Ordner).
-// Aufruf: npm run render            → alle 120 Bilder
+// Aufruf: npm run render            → alle 240 Bilder
 //         node render.mjs <ordner> 0 40 80 119   → nur einzelne Bilder (Probe)
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -10,7 +10,7 @@ import { createServer } from "vite";
 const here = dirname(fileURLToPath(import.meta.url));
 const out = resolve(process.argv[2] ?? resolve(here, "../../public/frames"));
 const only = process.argv.slice(3).map(Number);
-const frames = only.length ? only : Array.from({ length: 120 }, (_, i) => i);
+const frames = only.length ? only : Array.from({ length: 240 }, (_, i) => i);
 const CHROME = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 
 await mkdir(out, { recursive: true });

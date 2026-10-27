@@ -11,8 +11,10 @@
   --leinen: #efe6d6;
   --spur: rgba(47, 74, 58, 0.18);
   --pillen-fuellung: rgba(251, 246, 238, 0.14);
-  --karten-fuellung: rgba(251, 246, 238, 0.06);
-  --karten-toenung: rgba(251, 246, 238, 0.18);
+  /* dunkler als im Prompt: die Karten liegen am Ende über dem hellen Napf, creme Schrift braucht Kontrast */
+  --karten-fuellung: rgba(28, 18, 10, 0.3);
+  --karten-toenung: rgba(40, 26, 16, 0.38);
+  --text-schatten: 0 1px 14px rgba(20, 12, 6, 0.55), 0 0 2px rgba(20, 12, 6, 0.35);
   --glas-kante: rgba(251, 246, 238, 0.28);
   --orbit: rgba(251, 246, 238, 0.4);
   --orbit-hover: rgba(251, 246, 238, 0.5);
@@ -22,8 +24,9 @@
     180deg,
     rgba(20, 12, 6, 0.2),
     transparent 25%,
-    transparent 60%,
-    rgba(20, 12, 6, 0.6)
+    transparent 50%,
+    rgba(20, 12, 6, 0.45) 72%,
+    rgba(20, 12, 6, 0.78)
   );
   --karten-schatten: 0 calc(16 * var(--u)) calc(50 * var(--u)) rgba(40, 20, 8, 0.16);
   --pfoten-schatten: drop-shadow(0 calc(1 * var(--u)) calc(4 * var(--u)) rgba(0, 0, 0, 0.18));

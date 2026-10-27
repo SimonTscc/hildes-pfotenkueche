@@ -1,6 +1,6 @@
 # Hildes Pfotenküche
 
-Einseitige Scroll-Website für eine kleine BARF-Manufaktur: Kamerafahrt über einen Küchentisch (WebGL, 120 Bilder mit Tiefenkarte), Preloader mit Pfotenspur, Glaskarten, Pfoten-Cursor.
+Einseitige Scroll-Website für eine BARF-Ernährungsberaterin: Kamerafahrt über einen Küchentisch (WebGL, 120 Bilder mit Tiefenkarte), Preloader mit Pfotenspur, Glaskarten, Pfoten-Cursor.
 
 - Entwickeln: `npm install`, dann `npm run dev`
 - Bauen: `npm run build` (Basis-Pfad `/hildes-pfotenkueche/` für GitHub Pages)

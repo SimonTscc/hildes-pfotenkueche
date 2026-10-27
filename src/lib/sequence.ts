@@ -1,12 +1,23 @@
 import { DEPTH_URL, FRAME_COUNT, FRAME_URL } from "../config";
 
-export type Frame = { color: HTMLImageElement; depth: HTMLImageElement };
+/** Ein Bild der Fahrt. Die Bitmaps sind vorab dekodierte Kopien rund um die Scroll-Position. */
+export type Frame = {
+  color: HTMLImageElement;
+  depth: HTMLImageElement;
+  colorBitmap?: ImageBitmap;
+  depthBitmap?: ImageBitmap;
+  warming?: boolean;
+};
 
 type Slot = "idle" | "loading" | "done" | "failed";
 
 const BATCH_FIRST = 8;
 const BATCH_SIZE = 4;
 const BATCH_PAUSE_MS = 20;
+// Fenster der vorab dekodierten Bilder (vor/hinter der Position) und ab wann sie wieder freigegeben werden
+const WARM_BEHIND = 6,
+  WARM_AHEAD = 12,
+  KEEP = 24;
 
 function loadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -50,9 +61,42 @@ export class Sequence {
     return null;
   }
 
+  /**
+   * Dekodiert die Bilder um `index` im Hintergrund (createImageBitmap), damit das Hochladen in WebGL
+   * beim Scrollen nicht erst ein JPEG entpacken muss. Weit entfernte Bitmaps werden freigegeben.
+   */
+  warm(index: number) {
+    if (typeof createImageBitmap !== "function") return;
+    for (let i = Math.max(0, index - WARM_BEHIND); i <= Math.min(FRAME_COUNT - 1, index + WARM_AHEAD); i++) {
+      const frame = this.frames[i];
+      if (!frame || frame.colorBitmap || frame.warming) continue;
+      frame.warming = true;
+      Promise.all([createImageBitmap(frame.color), createImageBitmap(frame.depth)]).then(
+        ([color, depth]) => {
+          frame.warming = false;
+          if (this.disposed) return void (color.close(), depth.close());
+          frame.colorBitmap = color;
+          frame.depthBitmap = depth;
+        },
+        () => (frame.warming = false),
+      );
+    }
+    this.frames.forEach((frame, i) => {
+      if (frame?.colorBitmap && Math.abs(i - index) > KEEP) {
+        frame.colorBitmap.close();
+        frame.depthBitmap?.close();
+        frame.colorBitmap = frame.depthBitmap = undefined;
+      }
+    });
+  }
+
   dispose() {
     this.disposed = true;
     window.clearTimeout(this.timer);
+    for (const frame of this.frames) {
+      frame?.colorBitmap?.close();
+      frame?.depthBitmap?.close();
+    }
   }
 
   private async load(index: number) {
