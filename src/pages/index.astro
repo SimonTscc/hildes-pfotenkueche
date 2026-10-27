@@ -45,7 +45,7 @@ const fragen = [
         </p>
         <div class="aktionen">
           <a class="knopf" href={href("anfrage")}>Futterplan anfragen</a>
-          <a class="textlink" href="#napf">Erst mal den Napf füllen</a>
+          <a class="textlink runter" href="#napf">Erst mal den Napf füllen</a>
         </div>
       </div>
       <figure class="bild">
@@ -322,7 +322,10 @@ const fragen = [
     font-family: var(--kopf);
     font-size: 1.3rem;
     font-weight: 700;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+    text-decoration-color: var(--moehre);
   }
 
   tbody tr:hover th a {
@@ -470,6 +473,14 @@ const fragen = [
 
     tbody td.mehr {
       display: none;
+    }
+
+    /* „Mehr dazu“ fällt weg, also trägt der Planname den Pfeil */
+    tbody th a::after {
+      content: "→";
+      display: inline-block;
+      margin-left: 0.35em;
+      color: var(--moehre-dunkel);
     }
 
     tbody tr {

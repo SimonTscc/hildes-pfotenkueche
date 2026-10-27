@@ -145,6 +145,27 @@ img {
   text-decoration-color: var(--moehre);
 }
 
+/* Pfeil zeigt: das führt woandershin. Inline-Block, damit die Unterstreichung nicht unter den Pfeil läuft */
+a.textlink::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 0.35em;
+  color: var(--moehre-dunkel);
+  transition: transform 0.15s ease;
+}
+
+a.textlink.runter::after {
+  content: "↓";
+}
+
+a.textlink:hover::after {
+  transform: translateX(3px);
+}
+
+a.textlink.runter:hover::after {
+  transform: translateY(3px);
+}
+
 :focus-visible {
   outline: 3px solid var(--moehre);
   outline-offset: 3px;
@@ -185,7 +206,9 @@ img {
 
   .knopf,
   .knopf:hover,
-  .knopf:active {
+  .knopf:active,
+  a.textlink:hover::after,
+  a.textlink.runter:hover::after {
     transform: none;
   }
 }
