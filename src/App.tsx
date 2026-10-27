@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Angebot } from "./components/Angebot";
 import { CopyState } from "./components/CopyState";
 import { Cursor } from "./components/Cursor";
 import { GlassCards } from "./components/GlassCards";
@@ -280,7 +281,7 @@ export default function App() {
               intro={introStarted}
               line1="Frisch. Roh. Artgerecht."
               line2="Mit Liebe gebarft."
-              text="Hilde erstellt individuelle BARF-Ernährungspläne für Hunde und Katzen – damit du genau weißt, was in den Napf gehört."
+              text="Hilde erstellt individuelle BARF-Futterpläne, berät dich persönlich und analysiert die Ernährung deines Tieres – damit du genau weißt, was in den Napf gehört."
               button="Plan anfragen"
             />
             <CopyState
@@ -302,6 +303,7 @@ export default function App() {
           <Preloader phase={phase} refs={preloaderRefs} />
         </div>
       </main>
+      <Angebot />
       <Cursor introStarted={introStarted} unitRef={unitRef} />
     </>
   );

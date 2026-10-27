@@ -4,13 +4,13 @@ import styles from "./GlassCards.module.css";
 
 const CARDS = [
   {
-    title: "Dein Futterplan",
-    text: "Ein Plan mit Mengen und Rezepten für jede Woche – du kaufst ein und bereitest selbst zu.",
+    title: "Futterpläne",
+    text: "Vom Welpen bis zum Senior, dazu Pläne für Gesundheit, Gewicht, Ausschlussdiät und Darmsanierung.",
     side: "left",
   },
   {
-    title: "Persönliche Beratung",
-    text: "Hilde bespricht mit dir Gewohnheiten, Allergien und Ziele – auch für Senioren und empfindliche Mägen.",
+    title: "1:1-Beratung",
+    text: "Persönliches Gespräch und Ernährungsanalyse – für alle Fragen, die über den Plan hinausgehen.",
     side: "right",
   },
 ] as const;
