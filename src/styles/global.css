@@ -9,8 +9,10 @@
   --tanne: #22392d;
   --tanne-hell: #3c5a49;
   --tinte: #18231d;
-  --moehre: #e46b24;
-  --moehre-dunkel: #c4561a;
+  --moehre: #e46b24; /* Akzent: Linien, Punkte, Fokus. Nicht für Schrift oder Schriftflächen */
+  --moehre-tief: #b8501a; /* Knopfflächen, weiße Schrift darauf 5,0:1 */
+  --moehre-dunkel: #a84612; /* oranger Text, auf Salbei 4,6:1 */
+  --moehre-schatten: #8a3b10;
   --fleisch: #a9443a;
   --kuerbis: #eea24b;
   --gruen: #6f8f4e;
@@ -98,7 +100,7 @@ img {
   gap: 0.5em;
   padding: 0.85em 1.3em;
   border-radius: 6px;
-  background: var(--moehre);
+  background: var(--moehre-tief);
   color: #fff;
   font-family: var(--kopf);
   font-weight: 650;
@@ -106,7 +108,7 @@ img {
   text-decoration: none;
   border: 0;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--moehre-dunkel);
+  box-shadow: 0 3px 0 var(--moehre-schatten);
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease;
@@ -114,12 +116,12 @@ img {
 
 .knopf:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 0 var(--moehre-dunkel);
+  box-shadow: 0 4px 0 var(--moehre-schatten);
 }
 
 .knopf:active {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--moehre-dunkel);
+  box-shadow: 0 1px 0 var(--moehre-schatten);
 }
 
 .knopf.leise {
@@ -142,6 +144,23 @@ img {
   outline-offset: 3px;
 }
 
+.sprunglink {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: var(--tanne);
+  color: var(--blatt);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sprunglink:focus {
+  top: 12px;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -151,14 +170,29 @@ img {
   white-space: nowrap;
 }
 
+/* Reduzierte Bewegung: kein sanftes Scrollen; große Bewegungen ersetzen die Komponenten selbst,
+   kleine Rückmeldungen (Farbe, Deckkraft) bleiben erhalten */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+
+  .knopf,
+  .knopf:hover,
+  .knopf:active {
+    transform: none;
   }
+}
+
+/* Überschriften ausgewogen, Absätze ohne einsames letztes Wort */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+dd,
+li {
+  text-wrap: pretty;
 }

@@ -24,7 +24,7 @@ const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.c
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   </head>
   <body>
-    <a class="sr-only" href="#inhalt">Zum Inhalt springen</a>
+    <a class="sprunglink" href="#inhalt">Zum Inhalt springen</a>
     <Header />
     <main id="inhalt">
       <slot />

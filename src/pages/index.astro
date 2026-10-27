@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import NapfSpiel from "../components/NapfSpiel.astro";
-import Pfote from "../components/Pfote.astro";
 import { ablauf, leistungen, plaene } from "../data/angebot";
 import { site } from "../data/site";
 import { href } from "../lib/url";
@@ -37,7 +36,6 @@ const fragen = [
   <section class="held">
     <div class="wrap raster">
       <div class="text">
-        <p class="vorzeile"><Pfote size={18} /> {site.claim}</p>
         <h1>Was gehört heute in den Napf?</h1>
         <p class="lead">
           Hilde rechnet es für deinen Hund aus: mit Mengen, Rezepten und Einkaufsliste. Vom Welpen bis zum Senior, auch
@@ -180,15 +178,6 @@ const fragen = [
   /* Einstieg */
   .held {
     padding-top: clamp(40px, 6vw, 80px);
-  }
-
-  .vorzeile {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--moehre-dunkel);
-    font-weight: 650;
-    margin-bottom: 18px;
   }
 
   .held h1 {
@@ -432,12 +421,12 @@ const fragen = [
 
   details p {
     padding: 0 0 20px;
-    max-width: 66ch;
+    max-width: 60ch;
   }
 
   /* Schluss */
   .schluss {
-    background: var(--moehre);
+    background: var(--moehre-tief);
     color: #fff;
     text-align: center;
   }

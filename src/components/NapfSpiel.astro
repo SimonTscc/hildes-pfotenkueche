@@ -381,21 +381,22 @@ const gute = zutaten.filter((z) => z.gut).length;
     margin-top: 6px;
   }
 
+  /* Meldung färbt sich ganz statt mit Randstreifen */
   .meldung {
     min-height: 3.4em;
     padding: 12px 16px;
     border-radius: 8px;
     background: var(--blatt);
-    border-left: 4px solid var(--salbei-dunkel);
+    transition: background 0.25s ease;
   }
 
   .meldung.gut {
-    border-left-color: var(--gruen);
+    background: #e4ecd8;
   }
 
   .meldung.schlecht {
-    border-left-color: var(--fleisch);
-    background: #f6e6e2;
+    background: #f6e1dc;
+    color: #7a2a21;
   }
 
   .fertig {
@@ -515,6 +516,36 @@ const gute = zutaten.filter((z) => z.gut).length;
 
   .leeren {
     margin-top: 18px;
+  }
+
+  /* Reduzierte Bewegung: kein Hüpfen und Schütteln; die Stückchen blenden nur ein,
+     die farbige Meldung zeigt weiter, ob es richtig war */
+  @media (prefers-reduced-motion: reduce) {
+    .napf.plumps svg,
+    .napf.schuettelt svg,
+    .napf.freut svg,
+    .zutat.nein {
+      animation: none;
+    }
+
+    :global(.stueck) {
+      animation: einblenden 0.3s ease both;
+    }
+
+    .futter,
+    [data-stuecke] {
+      transition: none;
+    }
+
+    .zutat:hover {
+      transform: none;
+    }
+  }
+
+  @keyframes einblenden {
+    from {
+      opacity: 0;
+    }
   }
 
   :global(.geist) {
