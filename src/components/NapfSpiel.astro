@@ -201,14 +201,20 @@ const gute = zutaten.filter((z) => z.gut).length;
       knopf.addEventListener("pointerdown", (e) => {
         if (e.button !== 0) return;
         start = { x: e.clientX, y: e.clientY };
-        knopf.setPointerCapture(e.pointerId);
+        try {
+          knopf.setPointerCapture(e.pointerId);
+        } catch {
+          // ohne Capture funktioniert das Ziehen trotzdem, solange der Finger auf der Seite bleibt
+        }
       });
 
       knopf.addEventListener("pointermove", (e) => {
         if (!start) return;
         const dx = e.clientX - start.x,
           dy = e.clientY - start.y;
-        if (!zieht && Math.hypot(dx, dy) > 6) {
+        // Auf dem Handy blättert seitliches Wischen durch das Regal; gezogen wird nur nach oben
+        const losziehen = e.pointerType === "touch" ? dy < -8 && Math.abs(dy) > Math.abs(dx) : Math.hypot(dx, dy) > 6;
+        if (!zieht && losziehen) {
           zieht = geist(knopf);
           knopf.classList.add("gezogen");
         }
@@ -261,6 +267,9 @@ const gute = zutaten.filter((z) => z.gut).length;
     }
 
     fuellen();
+    if (matchMedia("(max-width: 860px) and (pointer: coarse)").matches) {
+      melden("Wisch durch die Zutaten und zieh sie nach oben in den Napf. Antippen geht auch.");
+    }
   }
 </script>
 
@@ -515,46 +524,100 @@ const gute = zutaten.filter((z) => z.gut).length;
     filter: drop-shadow(0 10px 12px rgba(24, 35, 29, 0.3));
   }
 
+  /* Handy: Napf oben, darunter eine Reihe Zutaten zum Wischen, alles auf einem Bildschirm.
+     Seitwärts wischen blättert, nach oben ziehen wirft die Zutat in den Napf. */
   @media (max-width: 860px) {
     .spiel {
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
     }
 
     .buehne {
-      position: static;
+      display: contents;
     }
 
-    /* Napf und Regal sollen auf dem Handy zusammen auf den Bildschirm passen */
     .napf {
-      max-width: 340px;
+      order: 1;
+      width: min(100%, 300px);
       margin-inline: auto;
-      width: 100%;
+      padding: 6px 4px 0;
+    }
+
+    .zaehler {
+      margin-top: 2px;
+      font-size: 0.92rem;
+    }
+
+    .regal {
+      order: 2;
+      position: relative;
+      min-width: 0; /* sonst wächst die Flex-Spalte auf die Breite aller Zutaten */
+      margin-inline: calc(-1 * var(--rand));
+    }
+
+    /* weicher Rand rechts zeigt: da kommt noch mehr */
+    .regal::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 34px;
+      width: 36px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, var(--salbei-dunkel));
     }
 
     .regal ul {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      padding: 4px var(--rand) 10px;
+      scroll-padding-inline: var(--rand);
+      scrollbar-width: none;
+    }
+
+    .regal ul::-webkit-scrollbar {
+      display: none;
+    }
+
+    .regal li {
+      flex: 0 0 88px;
+      scroll-snap-align: start;
     }
 
     .zutat {
-      font-size: 0.8rem;
-      padding: 10px 4px;
-    }
-  }
-
-  @media (max-width: 420px) {
-    .regal ul {
-      gap: 8px;
-    }
-
-    .zutat {
-      font-size: 0.8rem;
-      padding: 10px 4px;
+      height: 100%;
+      font-size: 0.78rem;
+      padding: 10px 4px 8px;
+      touch-action: pan-x;
     }
 
     .zutat .bild {
       width: 44px;
       height: 44px;
+    }
+
+    .zutat:hover {
+      transform: none;
+    }
+
+    .leeren {
+      margin: 0 var(--rand);
+      font-size: 0.92rem;
+    }
+
+    .meldung {
+      order: 3;
+      min-height: 0;
+      font-size: 0.95rem;
+      padding: 10px 14px;
+    }
+
+    .fertig {
+      order: 4;
     }
   }
 </style>
