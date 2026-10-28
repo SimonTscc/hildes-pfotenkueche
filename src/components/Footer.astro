@@ -1,13 +1,14 @@
 ---
 import { nav, site } from "../data/site";
 import { href } from "../lib/url";
-import Pfote from "./Pfote.astro";
+import logo from "../assets/logo/logo-dunkel.svg?raw";
+
+const logoSvg = logo.replace("<svg ", '<svg class="logo" ');
 ---
 <footer class="fuss">
   <div class="wrap raster">
     <div>
-      <p class="marke"><Pfote size={20} /> {site.name}</p>
-      <p class="leise">{site.claim}</p>
+      <p class="marke"><Fragment set:html={logoSvg} /></p>
     </div>
     <ul>
       {nav.map((item) => <li><a href={href(item.href)}>{item.label}</a></li>)}
@@ -39,13 +40,13 @@ import Pfote from "./Pfote.astro";
   }
 
   .marke {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--kopf);
-    font-weight: 400;
-    font-size: 1.3rem;
-    color: var(--kuerbis);
+    margin: 0;
+  }
+
+  .marke :global(svg) {
+    display: block;
+    width: min(100%, 360px);
+    height: auto;
   }
 
   .leise {

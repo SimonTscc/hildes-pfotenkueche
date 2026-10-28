@@ -1,7 +1,10 @@
 ---
 import { nav, site } from "../data/site";
 import { href } from "../lib/url";
-import Pfote from "./Pfote.astro";
+import logo from "../assets/logo/logo-kompakt.svg?raw";
+
+// Logo inline, damit es scharf bleibt und ohne eigene Anfrage lädt; der Linktext kommt aus aria-label
+const logoSvg = logo.replace("<svg ", '<svg aria-hidden="true" focusable="false" ');
 
 const current = Astro.url.pathname.replace(/\/$/, "");
 const isActive = (path: string) => current === href(path).replace(/\/$/, "");
@@ -9,8 +12,7 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
 <header class="kopf">
   <div class="wrap zeile">
     <a class="marke" href={href()} aria-label={`${site.name}, Startseite`}>
-      <span class="napf"><Pfote size={18} /></span>
-      <span class="name">Hildes<br />Pfotenküche</span>
+      <Fragment set:html={logoSvg} />
     </a>
     <nav aria-label="Hauptmenü">
       <ul>
@@ -42,28 +44,13 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
 
   .marke {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
     margin-right: auto;
   }
 
-  .napf {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--tanne);
-    color: var(--kuerbis);
-  }
-
-  .name {
-    font-family: var(--kopf);
-    font-weight: 400;
-    font-size: 1.02rem;
-    line-height: 1;
-    letter-spacing: -0.01em;
+  .marke :global(svg) {
+    display: block;
+    height: 58px;
+    width: auto;
   }
 
   ul {
@@ -101,6 +88,10 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
       flex-wrap: wrap;
       gap: 0 12px;
       padding-block: 10px;
+    }
+
+    .marke :global(svg) {
+      height: 34px;
     }
 
     nav {
