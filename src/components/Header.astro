@@ -28,7 +28,7 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
     position: sticky;
     top: 0;
     z-index: 20;
-    background: color-mix(in srgb, var(--salbei) 88%, transparent);
+    background: color-mix(in srgb, var(--creme) 88%, transparent);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--linie);
   }
@@ -83,11 +83,11 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
   }
 
   nav a:hover {
-    background: var(--salbei-dunkel);
+    background: var(--creme-dunkel);
   }
 
   nav a[aria-current="page"] {
-    box-shadow: inset 0 -3px 0 var(--moehre);
+    box-shadow: inset 0 -3px 0 var(--nuss);
     border-radius: 0;
   }
 

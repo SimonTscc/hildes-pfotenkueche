@@ -1,23 +1,23 @@
 @import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource-variable/onest";
 
-/* Hildes Pfotenküche: Salbei, Tanne, Möhre. Kein Creme-plus-Serif. */
+/* Hildes Pfotenküche: Creme, Tanne, Nuss (Palette „Wedding Bound Bride“). Sans statt Serif. */
 :root {
-  --salbei: #dfe5d6;
-  --salbei-dunkel: #c9d2bd;
-  --blatt: #f3f5ef;
-  --tanne: #22392d;
-  --tanne-hell: #3c5a49;
-  --tinte: #18231d;
-  --moehre: #e46b24; /* Akzent: Linien, Punkte, Fokus. Nicht für Schrift oder Schriftflächen */
-  --moehre-tief: #b8501a; /* Knopfflächen, weiße Schrift darauf 5,0:1 */
-  --moehre-dunkel: #a84612; /* oranger Text, auf Salbei 4,6:1 */
-  --moehre-schatten: #8a3b10;
+  --creme: #f6efe6;
+  --creme-dunkel: #e6dccf;
+  --blatt: #fcf8f3;
+  --tanne: #2e332e;
+  --tanne-hell: #5f675c; /* Salbei für Text */
+  --tinte: #1f231f;
+  --nuss: #8b6b55; /* Akzent: Linien, Punkte, Fokus. Nicht für Schrift oder Schriftflächen */
+  --nuss-tief: #6e5444; /* Knopfflächen mit weißer Schrift */
+  --nuss-dunkel: #6e5444; /* brauner Text */
+  --nuss-schatten: #4b392e;
   --fleisch: #a9443a;
-  --kuerbis: #eea24b;
-  --gruen: #6f8f4e;
+  --kuerbis: #d8b98f; /* Sand: Hervorhebung auf Tanne */
+  --gruen: #56684b;
   --knochen: #e9e1cf;
-  --linie: rgba(24, 35, 29, 0.16);
+  --linie: rgba(31, 35, 31, 0.16);
 
   --kopf: "Bricolage Grotesque Variable", "Trebuchet MS", sans-serif;
   --text: "Onest Variable", system-ui, sans-serif;
@@ -25,7 +25,7 @@
   --breite: 1200px;
   --rand: clamp(18px, 4vw, 40px);
   --radius: 10px;
-  --schatten: 0 18px 40px -24px rgba(24, 35, 29, 0.45);
+  --schatten: 0 18px 40px -24px rgba(31, 35, 31, 0.45);
 }
 
 *,
@@ -41,7 +41,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--salbei);
+  background: var(--creme);
   color: var(--tinte);
   font-family: var(--text);
   font-size: 17px;
@@ -100,7 +100,7 @@ img {
   gap: 0.5em;
   padding: 0.85em 1.3em;
   border-radius: 6px;
-  background: var(--moehre-tief);
+  background: var(--nuss-tief);
   color: #fff;
   font-family: var(--kopf);
   font-weight: 650;
@@ -108,7 +108,7 @@ img {
   text-decoration: none;
   border: 0;
   cursor: pointer;
-  box-shadow: 0 3px 0 var(--moehre-schatten);
+  box-shadow: 0 3px 0 var(--nuss-schatten);
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease;
@@ -116,12 +116,12 @@ img {
 
 .knopf:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 0 var(--moehre-schatten);
+  box-shadow: 0 4px 0 var(--nuss-schatten);
 }
 
 .knopf:active {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--moehre-schatten);
+  box-shadow: 0 1px 0 var(--nuss-schatten);
 }
 
 .knopf:disabled {
@@ -142,7 +142,7 @@ img {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
-  text-decoration-color: var(--moehre);
+  text-decoration-color: var(--nuss);
 }
 
 /* Pfeil zeigt: das führt woandershin. Inline-Block, damit die Unterstreichung nicht unter den Pfeil läuft */
@@ -150,7 +150,7 @@ a.textlink::after {
   content: "→";
   display: inline-block;
   margin-left: 0.35em;
-  color: var(--moehre-dunkel);
+  color: var(--nuss-dunkel);
   transition: transform 0.15s ease;
 }
 
@@ -167,7 +167,7 @@ a.textlink.runter:hover::after {
 }
 
 :focus-visible {
-  outline: 3px solid var(--moehre);
+  outline: 3px solid var(--nuss);
   outline-offset: 3px;
 }
 

@@ -18,18 +18,18 @@ const gute = zutaten.filter((z) => z.gut).length;
             <stop offset=".34" stop-color="#fff" stop-opacity="0" />
           </linearGradient>
         </defs>
-        <ellipse cx="180" cy="238" rx="128" ry="13" fill="#18231d" opacity=".16" />
-        <path d="M30 104c4 60 24 112 66 126 28 8 140 8 168 0 42-14 62-66 66-126z" fill="#22392d" />
+        <ellipse cx="180" cy="238" rx="128" ry="13" fill="#1f231f" opacity=".16" />
+        <path d="M30 104c4 60 24 112 66 126 28 8 140 8 168 0 42-14 62-66 66-126z" fill="#2e332e" />
         <path d="M30 104c4 60 24 112 66 126 28 8 140 8 168 0 42-14 62-66 66-126z" fill="url(#napf-glanz)" />
         <text x="180" y="186" text-anchor="middle" class="gravur">HILDE</text>
-        <ellipse cx="180" cy="104" rx="150" ry="41" fill="#2f4b3c" />
-        <ellipse cx="180" cy="104" rx="132" ry="33" fill="#132019" />
+        <ellipse cx="180" cy="104" rx="150" ry="41" fill="#40463f" />
+        <ellipse cx="180" cy="104" rx="132" ry="33" fill="#1c201c" />
         <g clip-path="url(#napf-innen)">
           <ellipse class="futter" data-futter cx="180" cy="190" rx="140" ry="40" fill="#6e2620" />
           <g data-stuecke></g>
           <ellipse class="oel" data-oel cx="150" cy="98" rx="60" ry="9" fill="#ffe08a" opacity="0" />
         </g>
-        <path d="M30 104a150 41 0 0 0 300 0" fill="none" stroke="#3c5a49" stroke-width="4" />
+        <path d="M30 104a150 41 0 0 0 300 0" fill="none" stroke="#5f675c" stroke-width="4" />
       </svg>
       <p class="zaehler"><span data-anzahl>0</span> von {gute} Bausteinen im Napf</p>
     </div>
@@ -296,8 +296,8 @@ const gute = zutaten.filter((z) => z.gut).length;
   }
 
   .napf.ziel {
-    background: rgba(228, 107, 36, 0.14);
-    outline: 3px dashed var(--moehre);
+    background: rgba(139, 107, 85, 0.14);
+    outline: 3px dashed var(--nuss);
     outline-offset: -3px;
   }
 
@@ -313,7 +313,7 @@ const gute = zutaten.filter((z) => z.gut).length;
     font-weight: 700;
     font-size: 22px;
     letter-spacing: 0.3em;
-    fill: rgba(243, 245, 239, 0.32);
+    fill: rgba(252, 248, 243, 0.32);
   }
 
   .futter,
@@ -391,7 +391,7 @@ const gute = zutaten.filter((z) => z.gut).length;
   }
 
   .meldung.gut {
-    background: #e4ecd8;
+    background: #e3e7dc;
   }
 
   .meldung.schlecht {
@@ -457,7 +457,7 @@ const gute = zutaten.filter((z) => z.gut).length;
     background: var(--blatt);
     border: 2px solid transparent;
     border-radius: 12px;
-    box-shadow: 0 3px 0 var(--salbei-dunkel);
+    box-shadow: 0 3px 0 var(--creme-dunkel);
     font: inherit;
     font-weight: 600;
     font-size: 0.92rem;
@@ -475,7 +475,7 @@ const gute = zutaten.filter((z) => z.gut).length;
 
   .zutat:hover {
     transform: translateY(-2px) rotate(-1deg);
-    border-color: var(--salbei-dunkel);
+    border-color: var(--creme-dunkel);
   }
 
   .zutat .bild {
@@ -491,7 +491,7 @@ const gute = zutaten.filter((z) => z.gut).length;
     opacity: 0.45;
     box-shadow: none;
     background: transparent;
-    border: 2px dashed var(--salbei-dunkel);
+    border: 2px dashed var(--creme-dunkel);
     cursor: default;
   }
 
@@ -552,7 +552,7 @@ const gute = zutaten.filter((z) => z.gut).length;
     position: fixed;
     z-index: 50;
     pointer-events: none;
-    filter: drop-shadow(0 10px 12px rgba(24, 35, 29, 0.3));
+    filter: drop-shadow(0 10px 12px rgba(31, 35, 31, 0.3));
   }
 
   /* Handy: Napf oben, darunter eine Reihe Zutaten zum Wischen, alles auf einem Bildschirm.
@@ -597,7 +597,7 @@ const gute = zutaten.filter((z) => z.gut).length;
       bottom: 34px;
       width: 36px;
       pointer-events: none;
-      background: linear-gradient(90deg, transparent, var(--salbei-dunkel));
+      background: linear-gradient(90deg, transparent, var(--creme-dunkel));
     }
 
     .regal ul {
