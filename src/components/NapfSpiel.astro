@@ -21,7 +21,9 @@ const gute = zutaten.filter((z) => z.gut).length;
         <ellipse cx="180" cy="238" rx="128" ry="13" fill="#1f231f" opacity=".16" />
         <path d="M30 104c4 60 24 112 66 126 28 8 140 8 168 0 42-14 62-66 66-126z" fill="#2e332e" />
         <path d="M30 104c4 60 24 112 66 126 28 8 140 8 168 0 42-14 62-66 66-126z" fill="url(#napf-glanz)" />
-        <text x="180" y="186" text-anchor="middle" class="gravur">HILDE</text>
+        <!-- jeder Buchstabe mit fester Mitte (gleiche Lücken für Bree Serif 22px):
+             letter-spacing in SVG reißt in Safari Lücken -->
+        <text x="142.4 161.1 177.9 198.6 219.5" y="186" text-anchor="middle" class="gravur">HILDE</text>
         <ellipse cx="180" cy="104" rx="150" ry="41" fill="#40463f" />
         <ellipse cx="180" cy="104" rx="132" ry="33" fill="#1c201c" />
         <g clip-path="url(#napf-innen)">
@@ -312,7 +314,6 @@ const gute = zutaten.filter((z) => z.gut).length;
     font-family: var(--kopf);
     font-weight: 400;
     font-size: 22px;
-    letter-spacing: 0.3em;
     fill: rgba(252, 248, 243, 0.32);
   }
 
