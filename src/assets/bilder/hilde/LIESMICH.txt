@@ -1,0 +1,2 @@
+Hier Hildes eigene Fotos ablegen: hilde.jpg (Porträt), hunde.jpg (drei Hunde), katzen.jpg (zwei Katzen).
+Auch .jpeg, .png oder .webp gehen. Danach neu deployen, die Platzhalter auf „Über Hilde“ verschwinden von selbst.

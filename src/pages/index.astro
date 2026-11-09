@@ -6,21 +6,21 @@ import StrukturDaten from "../components/StrukturDaten.astro";
 import { ablauf, leistungen, plaene } from "../data/angebot";
 import { site } from "../data/site";
 import { href } from "../lib/url";
-import aussie from "../assets/bilder/aussie-napf.jpg";
+import schaeferhund from "../assets/bilder/hilde/schaeferhund.jpg";
 import rohfutter from "../assets/bilder/rohfutter-napf.jpg";
-import husky from "../assets/bilder/husky-fuettern.jpg";
+import siamkatze from "../assets/bilder/siamkatze-napf.jpg";
 
 const fragen = [
   {
     f: "Was heißt BARF eigentlich?",
-    a: "BARF steht für „biologisch artgerechtes rohes Futter“. Dein Hund bekommt rohes Fleisch, Innereien, Knochen, etwas Gemüse und Obst, so zusammengestellt, dass alle Nährstoffe drin sind.",
+    a: "BARF steht für „biologisch artgerechtes rohes Futter“. Dein Tier bekommt rohes Fleisch, Innereien, Knochen und, je nach Tierart, etwas Gemüse und Obst, so zusammengestellt, dass alle Nährstoffe drin sind.",
   },
   {
     f: "Reicht es nicht, einfach Fleisch zu füttern?",
     a: "Leider nein. Ohne Knochen fehlt Kalzium, ohne Innereien fehlen Vitamine, und zu viel vom einen bringt anderes durcheinander. Genau dafür ist ein Plan da: Er rechnet die Mengen so aus, dass am Ende alles stimmt.",
   },
   {
-    f: "Mein Hund ist krank oder verträgt vieles nicht. Geht BARF trotzdem?",
+    f: "Mein Tier ist krank oder verträgt vieles nicht. Geht BARF trotzdem?",
     a: "Oft sogar besonders gut, weil du genau weißt, was im Napf landet. Dafür gibt es den BARF-Plan Gesundheit, die Ausschlussdiät und die Darmsanierung. Bei Erkrankungen stimmt sich Hilde gern mit deiner Tierarztpraxis ab.",
   },
   {
@@ -33,14 +33,14 @@ const fragen = [
   },
 ];
 ---
-<Base description="Individuelle BARF-Futterpläne für deinen Hund: Hilde rechnet Mengen, Rezepte und Einkaufsliste aus. Vom Welpen bis zum Senior, auch bei Allergien.">
+<Base description="Individuelle BARF-Futterpläne für Hunde und Katzen: Hilde rechnet Mengen, Rezepte und Einkaufsliste aus. Vom Welpen und Kitten bis zum Senior, auch bei Allergien.">
   <StrukturDaten slot="head" />
   <section class="held">
     <div class="wrap raster">
       <div class="text">
         <h1>Was gehört heute in den Napf?</h1>
         <p class="lead">
-          Hilde rechnet es für deinen Hund aus: mit Mengen, Rezepten und Einkaufsliste. Vom Welpen bis zum Senior, auch
+          Hilde rechnet es für deinen Hund oder deine Katze aus: mit Mengen, Rezepten und Einkaufsliste. Vom Welpen und Kitten bis zum Senior, auch
           bei Allergien oder einem empfindlichen Darm.
         </p>
         <div class="aktionen">
@@ -49,7 +49,7 @@ const fragen = [
         </div>
       </div>
       <figure class="bild">
-        <Image src={aussie} alt="Australian Shepherd hebt die Pfote vor seinem gefüllten Napf" widths={[480, 800, 1200]} sizes="(max-width: 900px) 90vw, 520px" loading="eager" fetchpriority="high" />
+        <Image src={schaeferhund} alt="Hildes Schäferhund-Mischling sitzt auf der Wiese und schaut erwartungsvoll" widths={[480, 800, 1200]} sizes="(max-width: 900px) 90vw, 520px" loading="eager" fetchpriority="high" />
         <figcaption>Wartet schon.</figcaption>
       </figure>
     </div>
@@ -59,7 +59,7 @@ const fragen = [
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Füll den Napf</h2>
-        <p>Zieh die Zutaten in Hildes Napf. Aber Vorsicht: Nicht alles, was in der Küche liegt, gehört auch in den Hund.</p>
+        <p>Zieh die Zutaten in Hildes Napf. Aber Vorsicht: Nicht alles, was in der Küche liegt, gehört auch in den Napf.</p>
       </div>
       <NapfSpiel />
     </div>
@@ -69,7 +69,7 @@ const fragen = [
     <div class="wrap raster">
       <div class="collage">
         <Image class="gross" src={rohfutter} alt="Hund frisst rohes BARF aus einem mintgrünen Napf" widths={[600, 1000]} sizes="(max-width: 900px) 92vw, 620px" />
-        <Image class="klein" src={husky} alt="Zwei Hände stellen einem Husky den Napf hin" widths={[400, 700]} sizes="(max-width: 900px) 60vw, 320px" />
+        <Image class="klein" src={siamkatze} alt="Siamkatze leckt sich nach dem Fressen das Maul, vor ihr ein Napf mit Fleisch" widths={[400, 700]} sizes="(max-width: 900px) 60vw, 320px" />
       </div>
       <div>
         <h2>So entsteht dein Plan</h2>
@@ -89,7 +89,7 @@ const fragen = [
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Die Futterpläne</h2>
-        <p>Jeder Plan wird für deinen Hund einzeln berechnet. {site.priceNote}</p>
+        <p>Jeder Plan wird für dein Tier einzeln berechnet. {site.priceNote}</p>
       </div>
       <table>
         <thead>
@@ -140,7 +140,7 @@ const fragen = [
 
   <section class="schluss">
     <div class="wrap">
-      <h2>Erzähl Hilde von deinem Hund.</h2>
+      <h2>Erzähl Hilde von deinem Tier.</h2>
       <p>Der Fragebogen dauert etwa zehn Minuten. Danach meldet sich Hilde bei dir.</p>
       <a class="knopf" href={href("anfrage")}>Zum Fragebogen</a>
     </div>
@@ -258,6 +258,9 @@ const fragen = [
     right: -6%;
     bottom: 0;
     width: 52%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: 50% 55%;
     border-radius: var(--radius);
     border: 8px solid var(--creme);
     box-shadow: var(--schatten);

@@ -1,0 +1,435 @@
+---
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import Seitenkopf from "../components/Seitenkopf.astro";
+import { downloads, euro, terminText, webinare } from "../data/shop";
+import { href } from "../lib/url";
+import kleinerHund from "../assets/bilder/hilde/kleiner-hund.jpg";
+import moehren from "../assets/bilder/moehren.jpg";
+
+// Beim Bauen schon vergangene Termine weglassen; was bis zum nächsten Deploy vergeht, blendet das Skript aus
+const heute = new Date().toISOString().slice(0, 10);
+const kommend = (w: (typeof webinare)[number]) =>
+  w.termine.filter((t) => t.datum >= heute).sort((a, b) => (a.datum + a.uhrzeit).localeCompare(b.datum + b.uhrzeit));
+const tag = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("de-DE", { day: "numeric" });
+const monat = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("de-DE", { month: "short" }).replace(".", "");
+const wochentag = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("de-DE", { weekday: "long" });
+---
+<Base title="Webinar & Shop" description="Live-Webinare mit Hilde buchen: BARF verstehen und „Mein Hund zieht ein“, auch für Tierschutzhunde. Dazu der Durchfall-Plan „SOS Durchfall“ als PDF.">
+  <Seitenkopf titel="Webinar & Shop" bild={kleinerHund} alt="Hildes kleiner weißer Hund schaut fröhlich in die Kamera">
+    <p>Live mit Hilde: im BARF-Webinar verstehst du, was in den Napf gehört, und in „Mein Hund zieht ein“ bereitest du dich auf deinen neuen Hund vor. Für die Tage, an denen der Bauch rumort, gibt es den Durchfall-Plan direkt zum Herunterladen.</p>
+    <p class="leise">Einen BARF-Plan für deinen Hund oder deine Katze rechnet Hilde individuell, den bekommst du über die <a href={href("anfrage")}>Anfrage</a>.</p>
+  </Seitenkopf>
+
+  {webinare.map((webinar) => (
+  <section class="wrap webinar" id={webinar.id} aria-labelledby={`${webinar.id}-titel`} data-webinar>
+    <div class="info">
+      <p class="dachzeile">{webinar.untertitel}</p>
+      <h2 id={`${webinar.id}-titel`}>{webinar.titel}</h2>
+      <p class="text">{webinar.text}</p>
+      <ul class="punkte">
+        {webinar.punkte.map((p) => <li>{p}</li>)}
+      </ul>
+      {webinar.nichtDabei && <p class="nicht-dabei">{webinar.nichtDabei} <a href={href("anfrage")}>Plan anfragen</a></p>}
+      <dl class="fakten">
+        <div><dt>Dauer</dt><dd>{webinar.dauer}</dd></div>
+        <div><dt>Wo</dt><dd>{webinar.ort}</dd></div>
+        <div><dt>Preis</dt><dd>{euro(webinar.preis)} pro Platz</dd></div>
+      </dl>
+    </div>
+
+    <div class="termine">
+      <h3>Nächste Termine</h3>
+      {kommend(webinar).length > 0 ? (
+        <ul data-termine>
+          {kommend(webinar).map((t) => (
+            <li data-datum={t.datum}>
+              <span class="kalender" aria-hidden="true"><b>{tag(t.datum)}</b><span>{monat(t.datum)}</span></span>
+              <span class="wann"><span class="sr-only">{terminText(t)}</span><span aria-hidden="true">{wochentag(t.datum)}<br />{t.uhrzeit} Uhr</span></span>
+              {t.ausgebucht ? (
+                <span class="voll">ausgebucht</span>
+              ) : (
+                <span class="aktion">
+                  <button
+                    type="button"
+                    class="knopf klein"
+                    data-kaufen
+                    data-id={`webinar-${webinar.id}-${t.datum}-${t.uhrzeit.replace(":", "")}`}
+                    data-titel={webinar.titel}
+                    data-detail={terminText(t)}
+                    data-preis={webinar.preis}
+                    data-max={webinar.maxPlaetze}
+                    aria-label={`${webinar.titel}: Platz am ${terminText(t)} in den Warenkorb`}
+                  >Platz buchen</button>
+                  <span class="drin" role="status" data-drin></span>
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <p class="keine" data-keine hidden={kommend(webinar).length > 0}>Die nächsten Termine stehen bald hier. Schau gern in ein paar Tagen wieder vorbei.</p>
+    </div>
+  </section>
+  ))}
+
+  {downloads.map((d) => (
+    <section class="band" id={d.id} aria-labelledby={`${d.id}-titel`}>
+      <div class="wrap raster">
+        <Image src={moehren} alt="Drei Möhren mit Grün auf einem Holztisch" widths={[480, 800]} sizes="(max-width: 860px) 92vw, 480px" />
+        <div class="download">
+          <p class="dachzeile">{d.fuer}</p>
+          <h2 id={`${d.id}-titel`}>{d.titel}</h2>
+          <p class="text">{d.text}</p>
+          <ul class="punkte">
+            {d.punkte.map((p) => <li>{p}</li>)}
+          </ul>
+          <p class="format">{d.format}</p>
+          <div class="kauf">
+            <span class="preis">{euro(d.preis)}</span>
+            <span class="aktion">
+              <button
+                type="button"
+                class="knopf"
+                data-kaufen
+                data-id={`download-${d.id}`}
+                data-titel={d.titel}
+                data-detail={d.format}
+                data-preis={d.preis}
+                data-max="1"
+              >In den Warenkorb</button>
+              <span class="drin" role="status" data-drin></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+</Base>
+
+<script>
+  import { beobachten, hinzufuegen, lesen } from "../lib/warenkorb";
+  import { href } from "../lib/url";
+
+  // Termine, die seit dem letzten Deploy vergangen sind, ausblenden
+  const heute = new Date();
+  const iso = `${heute.getFullYear()}-${String(heute.getMonth() + 1).padStart(2, "0")}-${String(heute.getDate()).padStart(2, "0")}`;
+  for (const liste of document.querySelectorAll<HTMLElement>("[data-termine]")) {
+    liste.querySelectorAll<HTMLElement>("li[data-datum]").forEach((li) => {
+      if (li.dataset.datum! < iso) li.remove();
+    });
+    if (!liste.children.length) {
+      liste.parentElement!.querySelector<HTMLElement>("[data-keine]")!.hidden = false;
+      liste.remove();
+    }
+  }
+
+  const knoepfe = [...document.querySelectorAll<HTMLButtonElement>("[data-kaufen]")];
+  const korb = href("warenkorb");
+
+  function stand() {
+    const posten = lesen();
+    for (const k of knoepfe) {
+      const p = posten.find((x) => x.id === k.dataset.id);
+      const drin = k.parentElement!.querySelector<HTMLElement>("[data-drin]")!;
+      const max = Number(k.dataset.max);
+      drin.innerHTML = p ? `${p.anzahl > 1 ? `${p.anzahl} Plätze` : "Liegt"} im Warenkorb · <a href="${korb}">ansehen</a>` : "";
+      k.disabled = !!p && p.anzahl >= max;
+      if (max === 1) k.textContent = p ? "Im Warenkorb" : "In den Warenkorb";
+    }
+  }
+
+  for (const k of knoepfe) {
+    k.addEventListener("click", () => {
+      hinzufuegen({
+        id: k.dataset.id!,
+        titel: k.dataset.titel!,
+        detail: k.dataset.detail,
+        preis: Number(k.dataset.preis),
+        max: Number(k.dataset.max),
+      });
+    });
+  }
+  beobachten(stand);
+</script>
+
+<style>
+  .dachzeile {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--nuss-dunkel);
+    margin-bottom: 10px;
+  }
+
+  .leise {
+    color: var(--tanne-hell);
+    font-size: 1rem;
+  }
+
+  .webinar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 96px);
+    padding-block: clamp(48px, 7vw, 104px);
+    align-items: start;
+    scroll-margin-top: 90px;
+  }
+
+  .webinar + .webinar {
+    border-top: 1px solid var(--linie);
+  }
+
+  .nicht-dabei {
+    margin-top: 22px;
+    padding: 14px 16px;
+    border: 1px solid var(--creme-dunkel);
+    background: var(--blatt);
+    border-radius: 8px;
+    max-width: 52ch;
+  }
+
+  .nicht-dabei a {
+    font-weight: 700;
+    color: var(--nuss-dunkel);
+  }
+
+  .text {
+    font-size: 1.12rem;
+    max-width: 52ch;
+    margin-top: 18px;
+  }
+
+  .punkte {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+
+  .punkte li {
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .punkte li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 14px;
+    height: 3px;
+    background: var(--nuss);
+  }
+
+  .fakten {
+    margin: 28px 0 0;
+    display: grid;
+    gap: 10px;
+    border-top: 1px solid var(--linie);
+    padding-top: 20px;
+  }
+
+  .fakten div {
+    display: grid;
+    grid-template-columns: 5.5em 1fr;
+    gap: 12px;
+  }
+
+  .fakten dt {
+    font-weight: 700;
+  }
+
+  .fakten dd {
+    margin: 0;
+  }
+
+  .termine {
+    background: var(--blatt);
+    border-radius: 14px;
+    padding: clamp(22px, 3vw, 36px);
+    box-shadow: var(--schatten);
+  }
+
+  .termine h3 {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+
+  .termine ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .termine li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--linie);
+  }
+
+  .termine li:last-child {
+    border-bottom: 0;
+  }
+
+  .kalender {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    padding: 6px 0 7px;
+    border-radius: 8px;
+    background: var(--creme);
+    border: 1px solid var(--creme-dunkel);
+    line-height: 1.1;
+  }
+
+  .kalender b {
+    font-family: var(--kopf);
+    font-weight: 400;
+    font-size: 1.55rem;
+  }
+
+  .kalender span {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--nuss-dunkel);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .wann {
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .aktion {
+    display: grid;
+    justify-items: end;
+    gap: 4px;
+  }
+
+  .drin {
+    font-size: 0.85rem;
+    color: var(--gruen);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .drin:empty {
+    display: none;
+  }
+
+  .voll {
+    color: var(--tanne-hell);
+    font-weight: 600;
+  }
+
+  .knopf.klein {
+    padding: 0.6em 1em;
+    font-size: 0.98rem;
+  }
+
+  .keine {
+    color: var(--tanne-hell);
+  }
+
+  .band {
+    background: var(--tanne);
+    color: var(--blatt);
+    padding-block: clamp(56px, 8vw, 104px);
+    scroll-margin-top: 74px;
+  }
+
+  .raster {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+
+  .raster :global(img) {
+    border-radius: var(--radius);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .band .dachzeile {
+    color: var(--kuerbis);
+  }
+
+  .band .punkte li::before {
+    background: var(--kuerbis);
+  }
+
+  .format {
+    margin-top: 20px;
+    color: var(--knochen);
+    font-size: 0.95rem;
+  }
+
+  .kauf {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 24px;
+    margin-top: 26px;
+  }
+
+  .kauf .preis {
+    font-family: var(--kopf);
+    font-size: 2rem;
+  }
+
+  .kauf .aktion {
+    justify-items: start;
+  }
+
+  .band .drin {
+    color: var(--kuerbis);
+    text-align: left;
+  }
+
+  /* „Im Warenkorb“: auf dem dunklen Band als Umriss statt ausgegraut, damit es lesbar bleibt */
+  .band .knopf:disabled {
+    opacity: 1;
+    background: transparent;
+    color: var(--kuerbis);
+    box-shadow: inset 0 0 0 2px var(--kuerbis);
+    cursor: default;
+  }
+
+  .band .drin :global(a),
+  .drin :global(a) {
+    color: inherit;
+  }
+
+  @media (max-width: 860px) {
+    .webinar,
+    .raster {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .termine li {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .termine .aktion,
+    .termine .voll {
+      grid-column: 1 / -1;
+      justify-items: stretch;
+    }
+
+    .termine .aktion .knopf {
+      justify-content: center;
+    }
+
+    .drin {
+      text-align: left;
+    }
+  }
+</style>

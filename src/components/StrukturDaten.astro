@@ -4,19 +4,19 @@
 import { getImage } from "astro:assets";
 import { leistungen, plaene } from "../data/angebot";
 import { site } from "../data/site";
-import aussie from "../assets/bilder/aussie-napf.jpg";
+import hilde from "../assets/bilder/hilde/hilde.jpg";
 
 const start = new URL(import.meta.env.BASE_URL, Astro.site).href;
-const bild = await getImage({ src: aussie, width: 1200, format: "jpg", quality: 80 });
+const bild = await getImage({ src: hilde, width: 1200, format: "jpg", quality: 80 });
 
 const dienst: Record<string, unknown> = {
   "@type": "ProfessionalService",
   "@id": `${start}#hilde`,
   name: site.name,
-  description: "Individuelle BARF-Futterpläne und Ernährungsberatung für Hunde, vom Welpen bis zum Senior.",
+  description: "Individuelle BARF-Futterpläne und Ernährungsberatung für Hunde und Katzen, vom Welpen und Kitten bis zum Senior.",
   url: start,
   image: new URL(bild.src, Astro.site).href,
-  knowsAbout: ["BARF", "Rohfütterung", "Hundeernährung", "Ausschlussdiät", "Darmsanierung beim Hund"],
+  knowsAbout: ["BARF", "Rohfütterung", "Hundeernährung", "Katzenernährung", "Ausschlussdiät", "Darmsanierung"],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Futterpläne und Beratung",

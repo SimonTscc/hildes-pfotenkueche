@@ -5,7 +5,7 @@ export const isPreview = true;
 
 export const site = {
   name: "Hildes Pfotenküche",
-  claim: "BARF-Ernährungsberatung für Hunde",
+  claim: "BARF-Ernährungsberatung für Hunde und Katzen",
   owner: "Hilde", // [SWAP] voller Name fürs Impressum
   email: "", // [SWAP] Kontaktadresse; leer = Kontakt wird als „folgt“ angezeigt
   formTo: "", // [SWAP] FormSubmit-Code oder E-Mail; leer = Formular noch nicht freigeschaltet
@@ -16,8 +16,9 @@ export const site = {
   priceNote: "Preise nennt dir Hilde mit deiner Anfrage.", // [SWAP] sobald Preise feststehen
 };
 
-export const nav = [
+export const nav: { label: string; href: string; kurz?: string }[] = [
   { label: "Futterpläne", href: "futterplaene" },
   { label: "Beratung", href: "beratung" },
+  { label: "Webinar & Shop", kurz: "Shop", href: "shop" }, // kurz: Beschriftung im engen Handy-Menü
   { label: "Über Hilde", href: "ueber-hilde" },
 ];

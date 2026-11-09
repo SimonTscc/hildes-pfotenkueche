@@ -1,20 +1,37 @@
 ---
 import Base from "../layouts/Base.astro";
 import Seitenkopf from "../components/Seitenkopf.astro";
+import EigenesFoto from "../components/EigenesFoto.astro";
 import { href } from "../lib/url";
-import husky from "../assets/bilder/husky-fuettern.jpg";
 
-// [SWAP] Hildes eigene Geschichte, Ausbildung und ein Foto von ihr (mit Hund) fehlen noch.
+// Hildes Fotos: hilde.jpg, hunde.jpg und katzen.jpg in src/assets/bilder/hilde/ ablegen, dann erscheinen sie hier.
+// [SWAP] Hildes eigene Geschichte und Ausbildung fehlen noch.
 const werte = [
   { titel: "Ehrlich gerechnet", text: "Ein Plan ist nur so gut wie seine Zahlen. Jede Ration wird nachgerechnet, bevor sie bei dir landet." },
   { titel: "Alltagstauglich", text: "Rezepte, die sich vorbereiten und einfrieren lassen. Niemand soll jeden Abend eine Stunde in der Küche stehen." },
   { titel: "Mit der Tierarztpraxis, nicht gegen sie", text: "Bei Erkrankungen gehört die Tierarztpraxis dazu. Hilde stimmt sich gern ab." },
 ];
 ---
-<Base title="Über Hilde" description="Wer hinter Hildes Pfotenküche steckt: Hilde erstellt BARF-Futterpläne für Hunde und berät Halter persönlich, vom ersten Napf bis zur Spezialdiät.">
-  <Seitenkopf titel="Über Hilde" bild={husky} alt="Zwei Hände stellen einem Husky den Napf hin">
-    <p>Hinter der Pfotenküche steht Hilde: Sie rechnet BARF-Pläne, beantwortet Fragen und begleitet Hundehalter bei der Umstellung auf frisches Futter.</p>
+<Base title="Über Hilde" description="Wer hinter Hildes Pfotenküche steckt: Hilde erstellt BARF-Futterpläne für Hunde und Katzen und berät Halter persönlich, vom ersten Napf bis zur Spezialdiät.">
+  <Seitenkopf titel="Über Hilde">
+    <p>Hinter der Pfotenküche steht Hilde: Sie rechnet BARF-Pläne, beantwortet Fragen und begleitet Hunde- und Katzenhalter bei der Umstellung auf frisches Futter.</p>
+    <p>Außerdem ist Hilde bei den Fellnasen Stuttgart aktiv. Deshalb kennt sie auch die Fragen, die sich stellen, wenn ein Hund aus dem Tierschutz einzieht. Darum geht es in ihrem Webinar <a href={href("shop#einzug")}>„Mein Hund zieht ein“</a>.</p>
+    <EigenesFoto slot="medien" name="hilde" alt="Hilde lächelt, vor ihr sitzt ihr grauer Hund mit offenem Maul" platzhalter="Hilde mit ihrem Hund" format="4 / 5" ausschnitt="50% 40%" eager />
   </Seitenkopf>
+
+  <section class="wrap familie" aria-labelledby="familie-titel">
+    <h2 id="familie-titel">Bei Hilde zu Hause</h2>
+    <div class="paar">
+      <figure>
+        <EigenesFoto name="hunde" alt="Hildes drei Hunde sitzen nebeneinander auf der Wiese: ein kleiner weißer Hund, ein Schäferhund-Mischling und ein grauer Hund" platzhalter="Hildes drei Hunde" format="4 / 3" ausschnitt="50% 60%" sizes="(max-width: 760px) 92vw, 560px" />
+        <figcaption>„Das sind meine drei Hunde.“</figcaption>
+      </figure>
+      <figure>
+        <EigenesFoto name="katzen" alt="Hildes zwei Katzen kuscheln auf dem Kratzbaum, die große schwarz-weiße und ein Kätzchen" platzhalter="Hildes zwei Katzen" format="4 / 3" ausschnitt="50% 58%" sizes="(max-width: 760px) 92vw, 560px" />
+        <figcaption>„Und das meine zwei Katzen.“</figcaption>
+      </figure>
+    </div>
+  </section>
 
   <section class="wrap werte">
     <h2>Wie Hilde arbeitet</h2>
@@ -31,6 +48,28 @@ const werte = [
 </Base>
 
 <style>
+  .familie {
+    padding-top: clamp(48px, 7vw, 96px);
+  }
+
+  .paar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  figcaption {
+    font-family: var(--kopf);
+    font-size: 1.35rem;
+    color: var(--nuss-dunkel);
+  }
+
   .werte {
     padding-block: clamp(48px, 7vw, 96px);
   }
@@ -63,6 +102,7 @@ const werte = [
   }
 
   @media (max-width: 760px) {
+    .paar,
     dl div {
       grid-template-columns: 1fr;
     }

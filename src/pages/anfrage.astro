@@ -4,10 +4,10 @@ import { leistungen, plaene } from "../data/angebot";
 import { site } from "../data/site";
 import { href } from "../lib/url";
 ---
-<Base title="Anfrage" description="Erzähl Hilde von deinem Hund: Fragebogen in etwa zehn Minuten ausfüllen und einen individuellen BARF-Futterplan oder eine Beratung anfragen.">
+<Base title="Anfrage" description="Erzähl Hilde von deinem Hund oder deiner Katze: Fragebogen in etwa zehn Minuten ausfüllen und einen individuellen BARF-Futterplan oder eine Beratung anfragen.">
   <div class="wrap seite">
     <div class="intro">
-      <h1>Erzähl von deinem Hund.</h1>
+      <h1>Erzähl von deinem Tier.</h1>
       <p>Je mehr Hilde weiß, desto besser passt der Plan. Nimm dir zehn Minuten, Pflichtfelder sind markiert. Hilde meldet sich danach per E-Mail bei dir.</p>
       <p class="leise">{site.priceNote}</p>
     </div>
@@ -21,8 +21,14 @@ import { href } from "../lib/url";
       </fieldset>
 
       <fieldset>
-        <legend>Über deinen Hund</legend>
-        <label>Name<input name="Hund" /></label>
+        <legend>Über dein Tier</legend>
+        <label>Tierart
+          <select name="Tierart">
+            <option value="Hund">Hund</option>
+            <option value="Katze">Katze</option>
+          </select>
+        </label>
+        <label>Name<input name="Tier" /></label>
         <label>Rasse oder Mischung<input name="Rasse" /></label>
         <div class="zwei">
           <label>Alter<input name="Alter" placeholder="z. B. 4 Jahre" /></label>
@@ -31,7 +37,7 @@ import { href } from "../lib/url";
         <label>Lebensphase
           <select name="Lebensphase" data-feld="phase">
             <option value="">Bitte wählen</option>
-            <option value="welpe">Welpe</option>
+            <option value="welpe">Welpe oder Kitten</option>
             <option value="adult">Erwachsen</option>
             <option value="senior">Senior</option>
           </select>

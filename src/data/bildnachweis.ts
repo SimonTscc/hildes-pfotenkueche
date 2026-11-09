@@ -1,9 +1,8 @@
 // Fotos von Unsplash (Unsplash-Lizenz: frei nutzbar, auch kommerziell; Nennung freiwillig, hier trotzdem).
 export const bildnachweis = [
-  { datei: "aussie-napf.jpg", motiv: "Australian Shepherd vor seinem Napf", von: "Ayla Verschueren", url: "https://unsplash.com/de/fotos/4amQU28yNyg" },
   { datei: "rohfutter-napf.jpg", motiv: "Hund frisst Rohfutter aus dem Napf", von: "Ayla Verschueren", url: "https://unsplash.com/de/fotos/3dKlQP-6120" },
-  { datei: "golden-kueche.jpg", motiv: "Golden Retriever in der Küche", von: "Taylor Friehl", url: "https://unsplash.com/de/fotos/7T0DnselHSs" },
-  { datei: "husky-fuettern.jpg", motiv: "Husky bekommt seinen Napf", von: "Xingchen Yan", url: "https://unsplash.com/de/fotos/Z_kqdLSPgg0" },
   { datei: "fleisch.jpg", motiv: "Rohes Fleisch", von: "Sergey Kotenev", url: "https://unsplash.com/de/fotos/-47X0XodINg" },
+  { datei: "siamkatze-napf.jpg", motiv: "Siamkatze am Napf", von: "nicola dowie", url: "https://unsplash.com/de/fotos/aG6954z64Jo" },
+  { datei: "katze-schale.jpg", motiv: "Getigerte Katze frisst aus einer Schale", von: "Song Chen", url: "https://unsplash.com/de/fotos/W0jR9oPy6I0" },
   { datei: "moehren.jpg", motiv: "Möhren auf Holz", von: "Armando Arauz", url: "https://unsplash.com/de/fotos/R198mTymEFQ" },
 ];

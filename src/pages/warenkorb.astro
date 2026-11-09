@@ -1,0 +1,500 @@
+---
+import Base from "../layouts/Base.astro";
+import { isPreview, site } from "../data/site";
+import { href } from "../lib/url";
+---
+<Base title="Warenkorb" description="Dein Warenkorb bei Hildes Pfotenküche: Webinar-Plätze und den Durchfall-Plan bestellen." kanonisch={false}>
+  <div class="wrap seite" data-kasse data-ziel={site.formTo} data-mail={site.email} data-vorschau={isPreview ? "ja" : undefined}>
+    <section class="korb" aria-labelledby="korb-titel">
+      <h1 id="korb-titel">Warenkorb</h1>
+
+      <div data-leer hidden>
+        <p class="gross">Dein Warenkorb ist noch leer.</p>
+        <p>Im Shop findest du die nächsten Webinar-Termine und den Durchfall-Plan zum Herunterladen.</p>
+        <p><a class="knopf" href={href("shop")}>Zum Shop</a></p>
+      </div>
+
+      <div data-voll hidden>
+        <ul class="posten" data-posten></ul>
+        <div class="summe">
+          <span>Gesamt</span>
+          <b data-summe></b>
+        </div>
+        {isPreview && <p class="leise">Vorschau: Die Preise sind Platzhalter, bis Hilde ihre Preise festlegt.</p>}
+        <p><a class="textlink" href={href("shop")}>Weiter einkaufen</a></p>
+      </div>
+
+      <div data-danke hidden tabindex="-1" class="danke">
+        <p class="gross">Danke für deine Bestellung!</p>
+        <p>Hilde schickt dir in den nächsten Tagen eine Bestätigung mit den Zahlungsdaten. Sobald die Zahlung da ist, bekommst du den Zugang zum Webinar beziehungsweise deinen Plan als PDF per E-Mail.</p>
+        <p><a class="textlink" href={href()}>Zur Startseite</a></p>
+      </div>
+    </section>
+
+    <form class="bogen" data-bestellung novalidate hidden>
+      <h2>Bestellen</h2>
+      <fieldset>
+        <legend class="sr-only">Deine Angaben</legend>
+        <label>Dein Name <span class="pflicht">Pflicht</span><input name="Name" autocomplete="name" required /></label>
+        <label>E-Mail <span class="pflicht">Pflicht</span><input name="E-Mail" type="email" autocomplete="email" required /></label>
+        <span class="hinweis">An diese Adresse kommen Bestätigung, Webinar-Link und Download.</span>
+        <div class="zwei" data-hundefelder hidden>
+          <label>Name deines Tieres<input name="Tier" /></label>
+          <label>Gewicht in kg<input name="Gewicht" inputmode="decimal" /></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="zahlung">
+        <legend>Bezahlen</legend>
+        <label class="wahl"><input type="radio" name="Zahlung" value="Überweisung" checked /> Überweisung</label>
+        <label class="wahl"><input type="radio" name="Zahlung" value="PayPal" /> PayPal</label>
+        <span class="hinweis">Die Zahlungsdaten bekommst du mit der Bestätigung von Hilde.</span>
+      </fieldset>
+
+      <label>Nachricht an Hilde (freiwillig)<textarea name="Nachricht" rows="3"></textarea></label>
+
+      <div class="haken-gruppe">
+        <label class="haken" data-widerruf hidden>
+          <input type="checkbox" name="Download sofort" value="zugestimmt" />
+          <span>Ich möchte den Plan sofort bekommen und weiß, dass ich mein Widerrufsrecht für den Download damit verliere. <span class="pflicht">Pflicht</span></span>
+        </label>
+        <label class="haken">
+          <input type="checkbox" name="Datenschutz" value="zugestimmt" required />
+          <span>Ich bin einverstanden, dass meine Angaben zur Abwicklung der Bestellung verwendet werden (siehe <a href={href("datenschutz")}>Datenschutz</a>). <span class="pflicht">Pflicht</span></span>
+        </label>
+      </div>
+
+      <div class="absenden">
+        <button class="knopf" type="submit">Zahlungspflichtig bestellen</button>
+        <p class="status" role="status" data-status></p>
+      </div>
+    </form>
+  </div>
+</Base>
+
+<script>
+  import { anzahlGesamt, beobachten, euro, lesen, leeren, setzeAnzahl, summe, type Posten } from "../lib/warenkorb";
+
+  const seite = document.querySelector<HTMLElement>("[data-kasse]")!;
+  const form = seite.querySelector<HTMLFormElement>("[data-bestellung]")!;
+  const liste = seite.querySelector<HTMLUListElement>("[data-posten]")!;
+  const leer = seite.querySelector<HTMLElement>("[data-leer]")!;
+  const voll = seite.querySelector<HTMLElement>("[data-voll]")!;
+  const danke = seite.querySelector<HTMLElement>("[data-danke]")!;
+  const status = form.querySelector<HTMLElement>("[data-status]")!;
+  const knopf = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const widerruf = form.querySelector<HTMLElement>("[data-widerruf]")!;
+  const widerrufBox = widerruf.querySelector("input")!;
+  const hundefelder = form.querySelector<HTMLElement>("[data-hundefelder]")!;
+  let bestellt = false;
+
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  const hatDownload = (p: Posten[]) => p.some((x) => x.id.startsWith("download-"));
+
+  function zeichnen() {
+    if (bestellt) return;
+    const posten = lesen();
+    const n = anzahlGesamt(posten);
+    leer.hidden = n > 0;
+    voll.hidden = n === 0;
+    form.hidden = n === 0;
+    danke.hidden = true;
+
+    liste.innerHTML = posten
+      .map(
+        (p) => `<li data-id="${esc(p.id)}">
+          <div class="was"><b>${esc(p.titel)}</b>${p.detail ? `<span>${esc(p.detail)}</span>` : ""}</div>
+          ${
+            p.max > 1
+              ? `<div class="menge" role="group" aria-label="Anzahl ${esc(p.titel)}">
+                  <button type="button" data-schritt="-1" aria-label="Einen weniger">−</button>
+                  <output aria-live="polite">${p.anzahl}</output>
+                  <button type="button" data-schritt="1" aria-label="Einen mehr"${p.anzahl >= p.max ? " disabled" : ""}>+</button>
+                </div>`
+              : `<div class="menge einzeln">1×</div>`
+          }
+          <span class="preis">${euro(p.preis * p.anzahl)}</span>
+          <button type="button" class="weg" data-weg>Entfernen</button>
+        </li>`,
+      )
+      .join("");
+    seite.querySelector<HTMLElement>("[data-summe]")!.textContent = euro(summe(posten));
+
+    const download = hatDownload(posten);
+    widerruf.hidden = !download;
+    widerrufBox.required = download;
+    hundefelder.hidden = !download;
+  }
+
+  liste.addEventListener("click", (e) => {
+    const ziel = e.target as HTMLElement;
+    const li = ziel.closest<HTMLElement>("li[data-id]");
+    if (!li) return;
+    const id = li.dataset.id!;
+    const p = lesen().find((x) => x.id === id);
+    if (!p) return;
+    const schritt = ziel.closest<HTMLElement>("[data-schritt]");
+    if (schritt) setzeAnzahl(id, p.anzahl + Number(schritt.dataset.schritt));
+    else if (ziel.closest("[data-weg]")) setzeAnzahl(id, 0);
+    // Fokus nach dem Neuzeichnen an derselben Stelle halten
+    const sel = schritt ? `li[data-id="${CSS.escape(id)}"] [data-schritt="${schritt.dataset.schritt}"]` : null;
+    const neu = sel ? liste.querySelector<HTMLButtonElement>(sel) : null;
+    if (neu && !neu.disabled) neu.focus();
+    else if (!sel) (liste.querySelector<HTMLButtonElement>("[data-weg]") ?? form.querySelector<HTMLElement>("input"))?.focus();
+  });
+
+  beobachten(zeichnen);
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const posten = lesen();
+    if (!posten.length) return;
+    const ziel = seite.dataset.ziel;
+    if (!ziel) {
+      status.textContent = "Bestellen geht, sobald Hildes Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
+      return;
+    }
+    // Leere freiwillige Felder nicht mitschicken, damit die Mail an Hilde übersichtlich bleibt
+    const daten = Object.fromEntries([...new FormData(form).entries()].filter(([, v]) => String(v).trim() !== ""));
+    const zeilen = posten.map((p) => `${p.anzahl} × ${p.titel}${p.detail ? ` (${p.detail})` : ""}: ${euro(p.preis * p.anzahl)}`);
+    status.textContent = "Wird gesendet …";
+    knopf.disabled = true;
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ziel)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          Bestellung: zeilen.join("\n"),
+          Gesamt: euro(summe(posten)),
+          ...daten,
+          _subject: `Neue Bestellung von ${daten["Name"]}: ${euro(summe(posten))}`,
+          _replyto: daten["E-Mail"],
+          _template: "box",
+          _captcha: "false",
+        }),
+      });
+      const antwort = await res.json().catch(() => ({}));
+      if (!res.ok || String(antwort.success) !== "true") throw new Error();
+      bestellt = true;
+      leeren();
+      form.reset();
+      form.hidden = true;
+      voll.hidden = true;
+      leer.hidden = true;
+      danke.hidden = false;
+      danke.focus();
+    } catch {
+      const mail = seite.dataset.mail;
+      status.textContent = mail
+        ? `Das hat leider nicht geklappt. Schreib Hilde gern direkt an ${mail}, dein Warenkorb bleibt gespeichert.`
+        : "Das hat leider nicht geklappt. Dein Warenkorb bleibt gespeichert, bitte versuch es gleich noch einmal.";
+    } finally {
+      knopf.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .seite {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 80px);
+    padding-block: clamp(40px, 6vw, 88px);
+    align-items: start;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: 1.9rem;
+  }
+
+  .korb > div {
+    display: grid;
+    gap: 16px;
+  }
+
+  .korb > div[hidden] {
+    display: none;
+  }
+
+  .gross {
+    font-family: var(--kopf);
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+
+  .leise {
+    color: var(--tanne-hell);
+    font-size: 0.95rem;
+  }
+
+  .danke:focus {
+    outline: none;
+  }
+
+  .posten {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--linie);
+  }
+
+  .posten :global(li) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas:
+      "was menge preis"
+      "weg weg weg";
+    gap: 6px 18px;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--linie);
+  }
+
+  .posten :global(.was) {
+    grid-area: was;
+    display: grid;
+    gap: 2px;
+  }
+
+  .posten :global(.was b) {
+    font-weight: 700;
+  }
+
+  .posten :global(.was span) {
+    color: var(--tanne-hell);
+    font-size: 0.95rem;
+  }
+
+  .posten :global(.menge) {
+    grid-area: menge;
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--creme-dunkel);
+    border-radius: 6px;
+    background: #fff;
+  }
+
+  .posten :global(.menge.einzeln) {
+    border-color: transparent;
+    background: none;
+    color: var(--tanne-hell);
+  }
+
+  .posten :global(.menge button) {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 1.2rem;
+    color: var(--tanne);
+    cursor: pointer;
+  }
+
+  .posten :global(.menge button:disabled) {
+    color: var(--creme-dunkel);
+    cursor: default;
+  }
+
+  .posten :global(.menge output) {
+    min-width: 1.6em;
+    text-align: center;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .posten :global(.preis) {
+    grid-area: preis;
+    min-width: 4.5em;
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .posten :global(.weg) {
+    grid-area: weg;
+    justify-self: start;
+    padding: 2px 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 0.92rem;
+    color: var(--nuss-dunkel);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .summe {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--kopf);
+    font-size: 1.4rem;
+  }
+
+  .summe b {
+    font-weight: 400;
+    font-size: 1.8rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bogen {
+    background: var(--blatt);
+    border-radius: 14px;
+    padding: clamp(22px, 3.5vw, 40px);
+    box-shadow: var(--schatten);
+    display: grid;
+    gap: 24px;
+    position: sticky;
+    top: 110px;
+  }
+
+  .bogen[hidden] {
+    display: none;
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  legend {
+    font-family: var(--kopf);
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+    padding: 0;
+  }
+
+  label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+  }
+
+  .pflicht {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--nuss-dunkel);
+  }
+
+  .hinweis {
+    margin-top: -6px;
+    color: var(--tanne-hell);
+    font-size: 0.92rem;
+  }
+
+  input:not([type="checkbox"], [type="radio"]),
+  textarea {
+    font: inherit;
+    font-weight: 400;
+    padding: 11px 12px;
+    border: 2px solid var(--creme-dunkel);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--tinte);
+    width: 100%;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: var(--nuss);
+  }
+
+  .zwei {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .zwei[hidden] {
+    display: none;
+  }
+
+  .wahl {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+  }
+
+  .wahl input,
+  .haken input {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    accent-color: var(--nuss);
+  }
+
+  .haken-gruppe {
+    display: grid;
+    gap: 14px;
+  }
+
+  .haken {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-weight: 500;
+  }
+
+  .haken[hidden] {
+    display: none;
+  }
+
+  .haken input {
+    margin-top: 3px;
+  }
+
+  .absenden {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .status {
+    font-weight: 600;
+    color: var(--tanne);
+  }
+
+  @media (max-width: 860px) {
+    .seite {
+      grid-template-columns: 1fr;
+    }
+
+    .bogen {
+      position: static;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .zwei {
+      grid-template-columns: 1fr;
+    }
+
+    .posten :global(li) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "was was"
+        "menge preis"
+        "weg weg";
+    }
+
+    .posten :global(.menge) {
+      justify-self: start;
+    }
+  }
+</style>

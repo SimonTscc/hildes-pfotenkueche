@@ -7,8 +7,10 @@ interface Props {
   titel: string;
   bild?: ImageMetadata;
   alt?: string;
+  /** Bildausschnitt, z. B. "50% 25%" für Hochformate mit Kopf oben */
+  ausschnitt?: string;
 }
-const { titel, bild, alt = "" } = Astro.props;
+const { titel, bild, alt = "", ausschnitt = "50% 50%" } = Astro.props;
 ---
 <header class="seitenkopf">
   <div class="wrap raster">
@@ -16,7 +18,7 @@ const { titel, bild, alt = "" } = Astro.props;
       <h1>{titel}</h1>
       <div class="einleitung"><slot /></div>
     </div>
-    {bild && <Image src={bild} alt={alt} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 520px" loading="eager" />}
+    {bild ? <Image src={bild} alt={alt} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 520px" loading="eager" style={`object-position: ${ausschnitt}`} /> : Astro.slots.has("medien") && <div><slot name="medien" /></div>}
   </div>
 </header>
 

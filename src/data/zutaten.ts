@@ -1,4 +1,4 @@
-// Zutaten für das Napf-Spiel. „gut“ gehört in einen BARF-Napf, der Rest ist für Hunde gefährlich.
+// Zutaten für das Napf-Spiel. „gut“ gehört in einen BARF-Napf, der Rest ist für Hunde und Katzen gefährlich.
 
 export type Zutat = {
   id: string;
@@ -10,7 +10,7 @@ export type Zutat = {
 
 export const zutaten: Zutat[] = [
   { id: "muskel", name: "Muskelfleisch", gut: true, farbe: "#a9443a", info: "Der größte Teil im Napf: liefert Eiweiß und Energie." },
-  { id: "schokolade", name: "Schokolade", gut: false, farbe: "#5a3825", info: "Schokolade enthält Theobromin und ist für Hunde giftig." },
+  { id: "schokolade", name: "Schokolade", gut: false, farbe: "#5a3825", info: "Schokolade enthält Theobromin und ist für Hunde und Katzen giftig." },
   { id: "pansen", name: "Pansen", gut: true, farbe: "#8f8366", info: "Riecht streng, schmeckt Hunden aber und ist gut für die Verdauung." },
   { id: "gemuese", name: "Gemüse", gut: true, farbe: "#e46b24", info: "Püriert, damit der Hund es verwerten kann. Liefert Ballaststoffe." },
   { id: "trauben", name: "Weintrauben", gut: false, farbe: "#6b4a7a", info: "Trauben und Rosinen können die Nieren schwer schädigen." },
