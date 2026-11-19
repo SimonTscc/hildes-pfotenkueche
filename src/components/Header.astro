@@ -17,12 +17,17 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
     <nav aria-label="Hauptmenü">
       <ul>
         {nav.map((item) => (
-          <li><a href={href(item.href)} aria-current={isActive(item.href) ? "page" : undefined}>
+          <li class:list={{ "nicht-handy": item.href === "newsletter" }}><a href={href(item.href)} aria-current={isActive(item.href) ? "page" : undefined}>
             {item.kurz ? <><span class="lang">{item.label}</span><span class="kurz" aria-hidden="true">{item.kurz}</span></> : item.label}
           </a></li>
         ))}
       </ul>
     </nav>
+    <!-- Newsletter auf dem Handy als Brief neben dem Korb, damit er ohne Wischen sichtbar ist -->
+    <a class="korb brief" href={href("newsletter")} aria-current={isActive("newsletter") ? "page" : undefined}>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5.5" width="18" height="13" rx="2" /><path d="m3.8 7 8.2 6 8.2-6" /></svg>
+      <span>Newsletter</span>
+    </a>
     <!-- Warenkorb außerhalb der Menüliste: auf dem Handy wischt die Liste seitlich, der Korb bleibt stehen -->
     <a class="korb" href={href("warenkorb")} aria-current={isActive("warenkorb") ? "page" : undefined}>
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5h2.2l2.1 10.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.1L21 8H6.2" /><circle cx="9.5" cy="20" r="1.3" /><circle cx="17" cy="20" r="1.3" /></svg>
@@ -60,7 +65,7 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
   .zeile {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 20px;
     min-height: 74px;
   }
 
@@ -71,7 +76,7 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
 
   .marke :global(svg) {
     display: block;
-    height: 49px;
+    height: 44px;
     width: auto;
   }
 
@@ -85,7 +90,8 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
 
   nav a {
     display: block;
-    padding: 8px 12px;
+    white-space: nowrap; /* Menüpunkte nie in zwei Zeilen brechen */
+    padding: 8px 10px;
     border-radius: 6px;
     text-decoration: none;
     font-weight: 550;
@@ -101,6 +107,8 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
   }
 
   .klein {
+    white-space: nowrap;
+    flex: none;
     padding: 0.6em 1em;
     font-size: 0.98rem;
   }
@@ -174,26 +182,58 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
     font-variant-numeric: tabular-nums;
   }
 
-  @media (max-width: 760px) {
+  /* Unter 1300 px passen Logo, fünf Menüpunkte, Korb (mit Zahl) und Knopf nicht mehr in eine Zeile.
+     Breiter ist der Inhalt auf 1200 px begrenzt; dort bleiben gut 70 px Reserve, weil Safari Schrift etwas breiter rechnet:
+     oben Logo und Knopf, darunter Menü und Korb */
+  @media (max-width: 1300px) {
     .zeile {
       flex-wrap: wrap;
       gap: 0 12px;
       padding-block: 10px;
     }
 
-    .marke :global(svg) {
-      height: 26px;
-    }
-
-    /* Zweite Zeile: wischbares Menü, rechts daneben fest der Warenkorb.
-       Der weiche Rand rechts zeigt, dass man weiterwischen kann. */
     nav {
       order: 3;
       flex: 1 1 calc(100% - 76px);
       min-width: 0;
       overflow-x: auto;
       scrollbar-width: none;
+    }
+
+    .korb {
+      order: 4;
+      flex: none;
+    }
+
+    nav a {
+      padding: 8px 0;
+      margin-right: 22px;
+      white-space: nowrap;
+    }
+  }
+
+  .brief {
+    display: none;
+  }
+
+  @media (max-width: 760px) {
+    .marke :global(svg) {
+      height: 26px;
+    }
+
+    /* Handy: Menü wischbar, der weiche Rand rechts zeigt, dass man weiterwischen kann.
+       Newsletter steht hier als Brief neben dem Korb statt in der Wischliste. */
+    nav {
+      flex-basis: calc(100% - 118px);
       mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+    }
+
+    .nicht-handy {
+      display: none;
+    }
+
+    .brief {
+      display: flex;
     }
 
     nav .lang {
@@ -205,16 +245,9 @@ const isActive = (path: string) => current === href(path).replace(/\/$/, "");
       white-space: nowrap;
     }
 
-    .korb {
-      order: 4;
-      flex: none;
-    }
-
     nav a {
-      padding: 8px 0;
       margin-right: 16px;
       font-size: 16px;
-      white-space: nowrap;
     }
   }
 </style>

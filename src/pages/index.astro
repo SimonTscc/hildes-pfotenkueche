@@ -3,9 +3,10 @@ import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import NapfSpiel from "../components/NapfSpiel.astro";
 import StrukturDaten from "../components/StrukturDaten.astro";
+import NewsletterAnmeldung from "../components/NewsletterAnmeldung.astro";
 import { ablauf, leistungen, plaene } from "../data/angebot";
-import { site } from "../data/site";
 import { href } from "../lib/url";
+import { euro } from "../data/shop";
 import schaeferhund from "../assets/bilder/hilde/schaeferhund.jpg";
 import rohfutter from "../assets/bilder/rohfutter-napf.jpg";
 import siamkatze from "../assets/bilder/siamkatze-napf.jpg";
@@ -89,17 +90,18 @@ const fragen = [
     <div class="wrap">
       <div class="kopfzeile">
         <h2>Die Futterpläne</h2>
-        <p>Jeder Plan wird für dein Tier einzeln berechnet. {site.priceNote}</p>
+        <p>Jeder Plan wird für dein Tier einzeln berechnet und enthält 4 Wochen Betreuung, in denen Hilde ihn bei Bedarf anpasst.</p>
       </div>
       <table>
         <thead>
-          <tr><th scope="col">Plan</th><th scope="col">Für wen</th><th scope="col"><span class="sr-only">Details</span></th></tr>
+          <tr><th scope="col">Plan</th><th scope="col">Für wen</th><th scope="col">Preis</th><th scope="col"><span class="sr-only">Details</span></th></tr>
         </thead>
         <tbody>
           {plaene.map((p) => (
             <tr>
               <th scope="row"><a href={href(`futterplaene#${p.id}`)}>{p.name}</a></th>
               <td>{p.fuer}</td>
+              <td class="preis">{p.bis ? "ab " : ""}{euro(p.preis)}</td>
               <td class="mehr"><a class="textlink" href={href(`futterplaene#${p.id}`)} aria-label={`Mehr zu ${p.name}`}>Mehr dazu</a></td>
             </tr>
           ))}
@@ -124,6 +126,10 @@ const fragen = [
         ))}
       </dl>
     </div>
+  </section>
+
+  <section class="wrap nl-block">
+    <NewsletterAnmeldung variante="kompakt" quelle="Startseite" />
   </section>
 
   <section class="fragen">
@@ -243,6 +249,10 @@ const fragen = [
   }
 
   /* Ablauf */
+  .nl-block {
+    padding-block: clamp(48px, 7vw, 96px) 0;
+  }
+
   .collage {
     position: relative;
     padding-bottom: 18%;
@@ -333,6 +343,12 @@ const fragen = [
 
   tbody tr:hover th a {
     color: var(--nuss-dunkel);
+  }
+
+  td.preis {
+    white-space: nowrap;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
 
   .mehr {

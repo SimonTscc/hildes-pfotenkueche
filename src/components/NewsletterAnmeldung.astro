@@ -1,0 +1,233 @@
+---
+// Newsletter-Anmeldung. „voll“ für die Newsletter-Seite, „kompakt“ als Kasten auf anderen Seiten.
+// Abgeschickt wird über FormSubmit an site.formTo; leer = Vorschau-Hinweis statt Versand.
+import { site } from "../data/site";
+import { newsletter } from "../data/newsletter";
+import { href } from "../lib/url";
+
+interface Props {
+  variante?: "voll" | "kompakt";
+  quelle: string; // wo sich jemand angemeldet hat, steht in der Mail an Hilde
+}
+const { variante = "voll", quelle } = Astro.props;
+const id = `nl-${quelle.toLowerCase().replace(/[^a-z]+/g, "-")}`;
+---
+<form class:list={["nl", variante]} data-newsletter data-ziel={site.formTo} data-quelle={quelle} novalidate aria-labelledby={variante === "kompakt" ? `${id}-titel` : undefined}>
+  {variante === "kompakt" && (
+    <div class="kopf">
+      <h2 id={`${id}-titel`}>{newsletter.kompaktTitel}</h2>
+      <p>{newsletter.kompaktText} <a href={href("newsletter")}>Mehr zum Newsletter</a></p>
+    </div>
+  )}
+  <div class="felder">
+    <label>Vorname<input name="Vorname" autocomplete="given-name" required /></label>
+    <label>E-Mail<input name="E-Mail" type="email" autocomplete="email" required /></label>
+    {variante === "voll" && (
+      <>
+        <label>Name deines Tieres <span class="frei">freiwillig</span><input name="Tier" /></label>
+        <fieldset class="art">
+          <legend>Bei dir zu Hause <span class="frei">freiwillig</span></legend>
+          <label class="wahl"><input type="radio" name="Tierart" value="Hund" /> Hund</label>
+          <label class="wahl"><input type="radio" name="Tierart" value="Katze" /> Katze</label>
+          <label class="wahl"><input type="radio" name="Tierart" value="Hund und Katze" /> beides</label>
+        </fieldset>
+      </>
+    )}
+  </div>
+  <label class="haken">
+    <input type="checkbox" name="Datenschutz" value="zugestimmt" required />
+    <span>Ich möchte den Newsletter bekommen und habe die <a href={href("datenschutz")}>Datenschutzerklärung</a> gelesen. Abmelden geht jederzeit.</span>
+  </label>
+  <div class="absenden">
+    <button class="knopf" type="submit">Newsletter abonnieren</button>
+    <p class="status" role="status" data-status></p>
+  </div>
+</form>
+
+<script>
+  for (const form of document.querySelectorAll<HTMLFormElement>("[data-newsletter]")) {
+    const status = form.querySelector<HTMLElement>("[data-status]")!;
+    const knopf = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const ziel = form.dataset.ziel;
+      if (!ziel) {
+        status.textContent = "Die Anmeldung wird freigeschaltet, sobald Hildes Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
+        return;
+      }
+      const daten = Object.fromEntries([...new FormData(form).entries()].filter(([, v]) => String(v).trim() !== ""));
+      status.textContent = "Wird gesendet …";
+      knopf.disabled = true;
+      try {
+        const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(ziel)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            ...daten,
+            Angemeldet_auf: form.dataset.quelle,
+            _subject: `Neue Newsletter-Anmeldung: ${daten["Vorname"]}`,
+            _replyto: daten["E-Mail"],
+            _template: "box",
+            _captcha: "false",
+          }),
+        });
+        const antwort = await res.json().catch(() => ({}));
+        if (!res.ok || String(antwort.success) !== "true") throw new Error();
+        form.reset();
+        status.textContent = "Danke! Hilde schickt dir noch eine E-Mail, mit der du die Anmeldung bestätigst.";
+      } catch {
+        status.textContent = "Das hat leider nicht geklappt. Bitte versuch es gleich noch einmal.";
+      } finally {
+        knopf.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .nl {
+    display: grid;
+    gap: 18px;
+  }
+
+  .kompakt {
+    background: var(--blatt);
+    border-radius: 14px;
+    padding: clamp(22px, 3.5vw, 40px);
+    box-shadow: var(--schatten);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 18px clamp(24px, 4vw, 56px);
+    align-items: end;
+  }
+
+  .kompakt .kopf {
+    grid-row: span 3;
+    align-self: center;
+  }
+
+  .kompakt h2 {
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    margin-bottom: 10px;
+  }
+
+  .kompakt .kopf p {
+    color: var(--tanne-hell);
+  }
+
+  .kompakt .kopf a {
+    color: var(--tanne);
+    font-weight: 600;
+  }
+
+  .felder {
+    display: grid;
+    gap: 14px;
+  }
+
+  .kompakt .felder {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+  }
+
+  .frei {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--tanne-hell);
+  }
+
+  input:not([type="checkbox"], [type="radio"]) {
+    font: inherit;
+    font-weight: 400;
+    padding: 11px 12px;
+    border: 2px solid var(--creme-dunkel);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--tinte);
+    width: 100%;
+  }
+
+  input:focus {
+    border-color: var(--nuss);
+  }
+
+  .art {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+
+  .art legend {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .wahl,
+  .haken {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-weight: 500;
+  }
+
+  .wahl {
+    align-items: center;
+  }
+
+  .wahl input,
+  .haken input {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    accent-color: var(--nuss);
+  }
+
+  .haken input {
+    margin-top: 3px;
+  }
+
+  .haken {
+    font-size: 0.95rem;
+  }
+
+  .absenden {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .status {
+    font-weight: 600;
+    color: var(--tanne);
+  }
+
+  @media (max-width: 860px) {
+    .kompakt {
+      grid-template-columns: 1fr;
+    }
+
+    .kompakt .kopf {
+      grid-row: auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .kompakt .felder {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

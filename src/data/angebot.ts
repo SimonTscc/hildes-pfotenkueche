@@ -6,6 +6,8 @@ export type Plan = {
   fuer: string; // für wen, eine Zeile
   text: string;
   inhalt: string[];
+  preis: number; // ab-Preis inkl. 4 Wochen Betreuung (Stand barfmaddi.de, 2026-11)
+  bis?: number; // höchster Preis mit verlängerter Betreuung
 };
 
 export const plaene: Plan[] = [
@@ -15,6 +17,8 @@ export const plaene: Plan[] = [
     fuer: "Welpen und Kitten im Wachstum",
     text: "Welpen und Kitten wachsen schnell, und ihr Bedarf ändert sich fast jede Woche. Der Plan wächst mit: Mengen und Kalzium werden so angepasst, dass Knochen und Gelenke in Ruhe wachsen können.",
     inhalt: ["Mengen nach aktuellem und erwartetem Endgewicht", "Anpassungen für die einzelnen Wachstumsphasen", "Hinweise zur Umstellung vom Züchterfutter"],
+    preis: 190,
+    bis: 255,
   },
   {
     id: "adult",
@@ -22,6 +26,8 @@ export const plaene: Plan[] = [
     fuer: "Gesunde erwachsene Hunde und Katzen",
     text: "Der Plan für den Alltag: abgestimmt auf Gewicht, Aktivität und das, was dein Tier gern frisst. Mit Rezepten, die sich gut vorbereiten und einfrieren lassen.",
     inhalt: ["Wochenplan mit Mengen pro Tag", "Einkaufsliste nach Fleischsorten", "Öle und Ergänzungen in der richtigen Dosis"],
+    preis: 175,
+    bis: 215,
   },
   {
     id: "senior",
@@ -29,6 +35,8 @@ export const plaene: Plan[] = [
     fuer: "Ältere Hunde und Katzen",
     text: "Mit dem Alter wird der Stoffwechsel ruhiger und die Verdauung empfindlicher. Der Plan setzt auf gut verdauliche Zutaten und denkt an Gelenke, Nieren und einen gemütlicheren Tagesablauf.",
     inhalt: ["Leichter verdauliche Zusammenstellung", "Angepasste Energie und Eiweißmenge", "Ergänzungen für Gelenke"],
+    preis: 190,
+    bis: 255,
   },
   {
     id: "gesundheit",
@@ -36,6 +44,8 @@ export const plaene: Plan[] = [
     fuer: "Hunde und Katzen mit Vorerkrankungen",
     text: "Bei Erkrankungen von Nieren, Leber, Bauchspeicheldrüse, Haut oder Herz braucht der Napf besondere Aufmerksamkeit. Hilde stimmt den Plan auf die Diagnose ab, gern zusammen mit deiner Tierarztpraxis.",
     inhalt: ["Zusammenstellung passend zur Diagnose", "Berücksichtigung von Blutwerten und Medikamenten", "Abstimmung mit der Tierarztpraxis auf Wunsch"],
+    preis: 200,
+    bis: 265,
   },
   {
     id: "gewicht",
@@ -43,6 +53,8 @@ export const plaene: Plan[] = [
     fuer: "Tiere, die ab- oder zunehmen sollen",
     text: "Gesund abnehmen heißt nicht hungern. Der Plan senkt die Energie, nicht das Sättigungsgefühl, und führt Schritt für Schritt zum Zielgewicht. Andersherum funktioniert er auch für Tiere, die zulegen müssen.",
     inhalt: ["Zielgewicht und realistischer Zeitplan", "Sättigende Zusammenstellung mit weniger Energie", "Anpassung nach Wiegen"],
+    preis: 190,
+    bis: 255,
   },
   {
     id: "ausschlussdiaet",
@@ -50,6 +62,8 @@ export const plaene: Plan[] = [
     fuer: "Verdacht auf Allergie oder Unverträglichkeit",
     text: "Juckreiz, Pfotenlecken, weicher Kot: Oft steckt eine Unverträglichkeit dahinter. Mit einer Ausschlussdiät findest du Schritt für Schritt heraus, was dein Tier verträgt und was nicht.",
     inhalt: ["Start mit einer einzigen Eiweißquelle", "Klarer Ablauf für jede Woche", "Tagebuch-Vorlage zum Beobachten"],
+    preis: 200,
+    bis: 265,
   },
   {
     id: "darmsanierung",
@@ -57,7 +71,14 @@ export const plaene: Plan[] = [
     fuer: "Nach Durchfall, Antibiotika oder Wurmkur",
     text: "Ein gestörter Darm braucht Zeit und das richtige Futter. Der Plan baut die Darmflora behutsam wieder auf und führt danach zurück in die normale Fütterung.",
     inhalt: ["Schonkost-Phase mit genauen Mengen", "Aufbau der Darmflora", "Übergang zurück zum normalen Plan"],
+    preis: 100,
   },
+];
+
+/** Zusatzleistungen zu einem bestehenden Plan (Preise wie barfmaddi.de, Stand 2026-11) */
+export const zusatz = [
+  { name: "Plananpassung", text: "Einfache Anpassung eines bestehenden Plans, z. B. nach einer Gewichtsänderung.", preis: "50 €" },
+  { name: "Betreuung verlängern", text: "Hilde bleibt länger an deiner Seite und beantwortet Fragen zum Plan.", preis: "2 Wochen 80 € · 4 Wochen 120 € · 3 Monate 250 €" },
 ];
 
 export type Leistung = { id: string; name: string; text: string; punkte?: string[] };

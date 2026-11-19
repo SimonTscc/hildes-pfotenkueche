@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import Seitenkopf from "../components/Seitenkopf.astro";
+import NewsletterAnmeldung from "../components/NewsletterAnmeldung.astro";
 import { downloads, euro, terminText, webinare } from "../data/shop";
 import { href } from "../lib/url";
 import kleinerHund from "../assets/bilder/hilde/kleiner-hund.jpg";
@@ -72,6 +73,10 @@ const wochentag = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("d
     </div>
   </section>
   ))}
+
+  <section class="wrap nl-block">
+    <NewsletterAnmeldung variante="kompakt" quelle="Shop" />
+  </section>
 
   {downloads.map((d) => (
     <section class="band" id={d.id} aria-labelledby={`${d.id}-titel`}>
@@ -173,6 +178,10 @@ const wochentag = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("d
     padding-block: clamp(48px, 7vw, 104px);
     align-items: start;
     scroll-margin-top: 90px;
+  }
+
+  .nl-block {
+    padding-bottom: clamp(48px, 7vw, 96px);
   }
 
   .webinar + .webinar {

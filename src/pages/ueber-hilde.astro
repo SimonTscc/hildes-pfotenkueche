@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import Seitenkopf from "../components/Seitenkopf.astro";
 import EigenesFoto from "../components/EigenesFoto.astro";
 import { href } from "../lib/url";
+import { hunde, katzen } from "../data/tiere";
 
 // Hildes Fotos: hilde.jpg, hunde.jpg und katzen.jpg in src/assets/bilder/hilde/ ablegen, dann erscheinen sie hier.
 // [SWAP] Hildes eigene Geschichte und Ausbildung fehlen noch.
@@ -22,28 +23,54 @@ const werte = [
   <section class="wrap familie" aria-labelledby="familie-titel">
     <h2 id="familie-titel">Bei Hilde zu Hause</h2>
     <div class="paar">
+      <div class="spalte">
       <figure>
         <EigenesFoto name="hunde" alt="Hildes drei Hunde sitzen nebeneinander auf der Wiese: ein kleiner weißer Hund, ein Schäferhund-Mischling und ein grauer Hund" platzhalter="Hildes drei Hunde" format="4 / 3" ausschnitt="50% 60%" sizes="(max-width: 760px) 92vw, 560px" />
         <figcaption>„Das sind meine drei Hunde.“</figcaption>
       </figure>
+      <dl class="tiere">
+        {hunde.map((t) => (
+          <div>
+            <dt>{t.name}{t.zusatz && <span class="zusatz"> ({t.zusatz})</span>}</dt>
+            <dd class:list={{ folgt: !t.text }}>{t.text || "Text folgt."}</dd>
+          </div>
+        ))}
+      </dl>
+      </div>
+      <div class="spalte">
       <figure>
         <EigenesFoto name="katzen" alt="Hildes zwei Katzen kuscheln auf dem Kratzbaum, die große schwarz-weiße und ein Kätzchen" platzhalter="Hildes zwei Katzen" format="4 / 3" ausschnitt="50% 58%" sizes="(max-width: 760px) 92vw, 560px" />
         <figcaption>„Und das meine zwei Katzen.“</figcaption>
       </figure>
+      <dl class="tiere">
+        {katzen.map((t) => (
+          <div>
+            <dt>{t.name}{t.zusatz && <span class="zusatz"> ({t.zusatz})</span>}</dt>
+            <dd class:list={{ folgt: !t.text }}>{t.text || "Text folgt."}</dd>
+          </div>
+        ))}
+      </dl>
+      </div>
     </div>
   </section>
 
   <section class="wrap werte">
-    <h2>Wie Hilde arbeitet</h2>
-    <dl>
-      {werte.map((w) => (
-        <div>
-          <dt>{w.titel}</dt>
-          <dd>{w.text}</dd>
-        </div>
-      ))}
-    </dl>
-    <a class="knopf" href={href("anfrage")}>Hilde schreiben</a>
+    <figure class="werte-foto">
+      <EigenesFoto name="nala-und-hilde" alt="Hilde lacht im Hintergrund, vorne schaut ihre graue Hündin Nala mit offenem Maul zur Seite" platzhalter="Hilde mit Nala" format="4 / 5" ausschnitt="50% 12%" sizes="(max-width: 900px) 92vw, 440px" />
+      <figcaption>„Nala und ich.“</figcaption>
+    </figure>
+    <div class="werte-text">
+      <h2>Wie Hilde arbeitet</h2>
+      <dl>
+        {werte.map((w) => (
+          <div>
+            <dt>{w.titel}</dt>
+            <dd>{w.text}</dd>
+          </div>
+        ))}
+      </dl>
+      <a class="knopf" href={href("anfrage")}>Hilde schreiben</a>
+    </div>
   </section>
 </Base>
 
@@ -70,8 +97,71 @@ const werte = [
     color: var(--nuss-dunkel);
   }
 
+  .spalte {
+    display: grid;
+    gap: 22px;
+    align-content: start;
+  }
+
+  /* Hildes Tiere: Name und ein paar Sätze, ruhig und klein unter dem Foto */
+  .tiere {
+    margin: 0;
+    display: grid;
+    gap: 16px;
+  }
+
+  .tiere div {
+    display: grid;
+    gap: 2px;
+    padding: 0;
+    border: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .tiere dt {
+    font-family: var(--kopf);
+    font-size: 1.15rem;
+  }
+
+  .tiere .zusatz {
+    font-family: var(--text);
+    font-size: 0.9rem;
+    color: var(--tanne-hell);
+  }
+
+  .tiere dd {
+    margin: 0;
+    font-size: 1rem;
+    max-width: 48ch;
+  }
+
+  .tiere dd.folgt {
+    color: var(--tanne-hell);
+  }
+
+  /* Foto von Hilde und Nala links, Arbeitsweise rechts; auf dem Handy untereinander */
   .werte {
     padding-block: clamp(48px, 7vw, 96px);
+    display: grid;
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+
+  .werte-foto {
+    position: sticky;
+    top: 110px;
+  }
+
+  @media (max-width: 900px) {
+    .werte {
+      grid-template-columns: 1fr;
+    }
+
+    .werte-foto {
+      position: static;
+      max-width: 440px;
+    }
   }
 
   h2 {

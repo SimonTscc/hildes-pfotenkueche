@@ -13,7 +13,7 @@ export const site = {
   zip: "", // [SWAP]
   city: "", // [SWAP]
   instagram: "", // [SWAP] z. B. https://www.instagram.com/…
-  priceNote: "Preise nennt dir Hilde mit deiner Anfrage.", // [SWAP] sobald Preise feststehen
+  priceNote: "Jeder Futterplan enthält 4 Wochen Betreuung. Beratung und Ernährungsanalyse nach Absprache.", // Preise stehen in angebot.ts
 };
 
 export const nav: { label: string; href: string; kurz?: string }[] = [
@@ -21,4 +21,5 @@ export const nav: { label: string; href: string; kurz?: string }[] = [
   { label: "Beratung", href: "beratung" },
   { label: "Webinar & Shop", kurz: "Shop", href: "shop" }, // kurz: Beschriftung im engen Handy-Menü
   { label: "Über Hilde", href: "ueber-hilde" },
+  { label: "Newsletter", href: "newsletter" },
 ];

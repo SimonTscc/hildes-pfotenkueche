@@ -82,7 +82,7 @@ export const downloads: Download[] = [
     text: "Was du sofort tun kannst, was in den Napf darf und wie du dein Tier danach behutsam zurück zum normalen Futter führst. Mit klaren Mengen und dem Hinweis, wann es Zeit für die Tierarztpraxis ist.",
     punkte: ["Schonkost-Plan für die ersten Tage", "Mengen nach Gewicht deines Tieres", "Rückweg zum normalen Futter", "Warnzeichen, bei denen du zur Tierarztpraxis solltest"],
     format: "PDF zum Herunterladen und Ausdrucken",
-    preis: 19, // [SWAP]
+    preis: 19.99, // wie „SOS Durchfall“ bei barfmaddi.de
   },
 ];
 

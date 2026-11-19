@@ -13,12 +13,12 @@ interface Props {
 const { titel, bild, alt = "", ausschnitt = "50% 50%" } = Astro.props;
 ---
 <header class="seitenkopf">
-  <div class="wrap raster">
+  <div class:list={["wrap raster", { "mit-medien": !bild && Astro.slots.has("medien") }]}>
     <div>
       <h1>{titel}</h1>
       <div class="einleitung"><slot /></div>
     </div>
-    {bild ? <Image src={bild} alt={alt} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 520px" loading="eager" style={`object-position: ${ausschnitt}`} /> : Astro.slots.has("medien") && <div><slot name="medien" /></div>}
+    {bild ? <Image src={bild} alt={alt} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 520px" loading="eager" style={`object-position: ${ausschnitt}`} /> : Astro.slots.has("medien") && <div class="medien"><slot name="medien" /></div>}
   </div>
 </header>
 
@@ -55,9 +55,25 @@ const { titel, bild, alt = "", ausschnitt = "50% 50%" } = Astro.props;
     box-shadow: var(--schatten);
   }
 
+  /* Hohes Porträt (Über Hilde): Text und Foto auf gemeinsamer Mitte, Foto schmaler,
+     sonst steht der Text unten und darüber bleibt eine leere Fläche */
+  .mit-medien {
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: center;
+  }
+
+  .medien {
+    width: min(100%, 400px);
+    justify-self: end;
+  }
+
   @media (max-width: 900px) {
     .raster {
       grid-template-columns: 1fr;
+    }
+
+    .medien {
+      justify-self: start;
     }
   }
 </style>
