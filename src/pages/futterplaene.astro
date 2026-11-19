@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import Seitenkopf from "../components/Seitenkopf.astro";
-import { plaene, zusatz } from "../data/angebot";
+import { plaene, zusatz, verlaengerung } from "../data/angebot";
 import { site } from "../data/site";
 import { href } from "../lib/url";
 import { euro } from "../data/shop";
@@ -33,7 +33,7 @@ import fleisch from "../assets/bilder/fleisch.jpg";
           </ul>
           <div class="kauf">
             <p class="preis"><span class="ab">{p.bis ? "ab " : ""}</span>{euro(p.preis)}</p>
-            <p class="preis-info">{p.bis ? `inkl. 4 Wochen Betreuung, mit längerer Betreuung bis ${euro(p.bis)}` : "Einzeln oder als Ergänzung zu einem Plan"}</p>
+            <p class="preis-info">{p.bis ? `inkl. 4 Wochen Betreuung, verlängerbar: ${verlaengerung.map((v) => `+${v.wochen} Wochen ${euro(v.preis)}`).join(", ")}` : "Einzeln oder als Ergänzung zu einem Plan"}</p>
           </div>
           <a class="knopf leise" href={href(`anfrage?plan=${p.id}`)}>Diesen Plan anfragen</a>
         </section>
