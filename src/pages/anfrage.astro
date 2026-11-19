@@ -4,11 +4,11 @@ import { leistungen, plaene } from "../data/angebot";
 import { site } from "../data/site";
 import { href } from "../lib/url";
 ---
-<Base title="Anfrage" description="Erzähl Hilde von deinem Hund oder deiner Katze: Fragebogen in etwa zehn Minuten ausfüllen und einen individuellen BARF-Futterplan oder eine Beratung anfragen.">
+<Base title="Anfrage" description="Erzähl mir von deinem Hund oder deiner Katze: Fragebogen in etwa zehn Minuten ausfüllen und einen individuellen BARF-Futterplan oder eine Beratung anfragen.">
   <div class="wrap seite">
     <div class="intro">
       <h1>Erzähl von deinem Tier.</h1>
-      <p>Je mehr Hilde weiß, desto besser passt der Plan. Nimm dir zehn Minuten, Pflichtfelder sind markiert. Hilde meldet sich danach per E-Mail bei dir.</p>
+      <p>Je mehr ich weiß, desto besser passt der Plan. Nimm dir zehn Minuten, Pflichtfelder sind markiert. Ich melde mich danach per E-Mail bei dir.</p>
       <p class="leise">{site.priceNote}</p>
     </div>
 
@@ -68,7 +68,7 @@ import { href } from "../lib/url";
             </optgroup>
           </select>
         </label>
-        <label>Noch etwas, das Hilde wissen sollte?<textarea name="Nachricht" rows="4"></textarea></label>
+        <label>Noch etwas, das ich wissen sollte?<textarea name="Nachricht" rows="4"></textarea></label>
         <label class="haken">
           <input type="checkbox" name="Datenschutz" value="zugestimmt" required />
           <span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage verwendet werden (siehe <a href={href("datenschutz")}>Datenschutz</a>). <span class="pflicht">Pflicht</span></span>
@@ -114,7 +114,7 @@ import { href } from "../lib/url";
       }
       const ziel = form.dataset.ziel;
       if (!ziel) {
-        status.textContent = "Das Formular wird freigeschaltet, sobald Hildes Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
+        status.textContent = "Das Formular wird freigeschaltet, sobald meine Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
         return;
       }
       const daten = Object.fromEntries(new FormData(form).entries());
@@ -136,11 +136,11 @@ import { href } from "../lib/url";
         const antwort = await res.json().catch(() => ({}));
         if (!res.ok || String(antwort.success) !== "true") throw new Error();
         form.reset();
-        status.textContent = "Danke! Hilde meldet sich bald bei dir.";
+        status.textContent = "Danke! Ich melde mich bald bei dir.";
       } catch {
         const mail = form.dataset.mail;
         status.textContent = mail
-          ? `Das hat leider nicht geklappt. Schreib Hilde gern direkt an ${mail}, deine Angaben sind noch im Formular.`
+          ? `Das hat leider nicht geklappt. Schreib mir gern direkt an ${mail}, deine Angaben sind noch im Formular.`
           : "Das hat leider nicht geklappt. Deine Angaben sind noch im Formular, bitte versuch es gleich noch einmal.";
       } finally {
         knopf.disabled = false;

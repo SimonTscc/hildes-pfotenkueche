@@ -29,10 +29,10 @@ export const webinare: Webinar[] = [
   {
     id: "barf",
     titel: "BARF-Webinar",
-    untertitel: "Live mit Hilde, Fragen ausdrücklich erwünscht",
-    text: "Hilde erklärt in kleiner Runde, was hinter BARF steckt: welche Bausteine in den Napf gehören, warum, und worauf du beim Einkaufen, Lagern und Umstellen achten solltest. Danach ist Zeit für deine Fragen.",
+    untertitel: "Live mit mir, Fragen ausdrücklich erwünscht",
+    text: "Ich erkläre in kleiner Runde, was hinter BARF steckt: welche Bausteine in den Napf gehören, warum, und worauf du beim Einkaufen, Lagern und Umstellen achten solltest. Danach ist Zeit für deine Fragen.",
     punkte: ["Die Bausteine: Fleisch, Knochen, Innereien, Gemüse, Öle", "Was Hund und Katze nicht fressen dürfen", "Einkaufen, Lagern, Auftauen", "Wie eine Umstellung abläuft", "Offene Fragerunde am Ende"],
-    nichtDabei: "Mengen und Rezepte für dein Tier rechnet Hilde nicht im Webinar, sondern im individuellen Futterplan.",
+    nichtDabei: "Mengen und Rezepte für dein Tier rechne ich nicht im Webinar, sondern im individuellen Futterplan.",
     dauer: "etwa 90 Minuten", // [SWAP]
     ort: "online per Zoom, den Link bekommst du per E-Mail", // [SWAP] Plattform
     preis: 29, // [SWAP]
@@ -49,7 +49,7 @@ export const webinare: Webinar[] = [
     id: "einzug",
     titel: "Mein Hund zieht ein",
     untertitel: "Für alle, bei denen bald ein Hund einzieht, auch aus dem Tierschutz",
-    text: "Ein neuer Hund bringt viel Freude und viele Fragen mit. Hilde ist auch bei den Fellnasen Stuttgart aktiv und weiß, was in den ersten Wochen zählt, gerade bei Hunden aus dem Tierschutz, die schon einiges hinter sich haben.",
+    text: "Ein neuer Hund bringt viel Freude und viele Fragen mit. Ich bin auch bei den Fellnasen Stuttgart aktiv und weiß, was in den ersten Wochen zählt, gerade bei Hunden aus dem Tierschutz, die schon einiges hinter sich haben.",
     punkte: ["Was du vor dem Einzug vorbereiten solltest", "Die ersten Tage und Wochen: Ruhe, Routine, Vertrauen", "Tierschutzhunde: was anders sein kann und worauf du achtest", "Fütterung am Anfang, gerade bei empfindlichem Magen", "Offene Fragerunde am Ende"],
     dauer: "etwa 90 Minuten", // [SWAP]
     ort: "online per Zoom, den Link bekommst du per E-Mail", // [SWAP] Plattform

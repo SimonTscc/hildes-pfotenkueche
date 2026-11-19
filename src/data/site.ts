@@ -20,6 +20,6 @@ export const nav: { label: string; href: string; kurz?: string }[] = [
   { label: "Futterpläne", href: "futterplaene" },
   { label: "Beratung", href: "beratung" },
   { label: "Webinar & Shop", kurz: "Shop", href: "shop" }, // kurz: Beschriftung im engen Handy-Menü
-  { label: "Über Hilde", href: "ueber-hilde" },
+  { label: "Über mich", href: "ueber-hilde" },
   { label: "Newsletter", href: "newsletter" },
 ];

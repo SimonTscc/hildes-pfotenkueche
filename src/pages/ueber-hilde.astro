@@ -10,22 +10,22 @@ import { hunde, katzen } from "../data/tiere";
 const werte = [
   { titel: "Ehrlich gerechnet", text: "Ein Plan ist nur so gut wie seine Zahlen. Jede Ration wird nachgerechnet, bevor sie bei dir landet." },
   { titel: "Alltagstauglich", text: "Rezepte, die sich vorbereiten und einfrieren lassen. Niemand soll jeden Abend eine Stunde in der Küche stehen." },
-  { titel: "Mit der Tierarztpraxis, nicht gegen sie", text: "Bei Erkrankungen gehört die Tierarztpraxis dazu. Hilde stimmt sich gern ab." },
+  { titel: "Mit der Tierarztpraxis, nicht gegen sie", text: "Bei Erkrankungen gehört die Tierarztpraxis dazu. Ich stimme mich gern ab." },
 ];
 ---
-<Base title="Über Hilde" description="Wer hinter Hildes Pfotenküche steckt: Hilde erstellt BARF-Futterpläne für Hunde und Katzen und berät Halter persönlich, vom ersten Napf bis zur Spezialdiät.">
-  <Seitenkopf titel="Über Hilde">
-    <p>Hinter der Pfotenküche steht Hilde: Sie rechnet BARF-Pläne, beantwortet Fragen und begleitet Hunde- und Katzenhalter bei der Umstellung auf frisches Futter.</p>
-    <p>Außerdem ist Hilde bei den Fellnasen Stuttgart aktiv. Deshalb kennt sie auch die Fragen, die sich stellen, wenn ein Hund aus dem Tierschutz einzieht. Darum geht es in ihrem Webinar <a href={href("shop#einzug")}>„Mein Hund zieht ein“</a>.</p>
-    <EigenesFoto slot="medien" name="hilde" alt="Hilde lächelt, vor ihr sitzt ihr grauer Hund mit offenem Maul" platzhalter="Hilde mit ihrem Hund" format="4 / 5" ausschnitt="50% 40%" eager />
+<Base title="Über mich" description="Wer hinter Hildes Pfotenküche steckt: Ich erstelle BARF-Futterpläne für Hunde und Katzen und berate Halter persönlich, vom ersten Napf bis zur Spezialdiät.">
+  <Seitenkopf titel="Über mich">
+    <p>Hinter der Pfotenküche stehe ich, Hilde: Ich rechne BARF-Pläne, beantworte Fragen und begleite Hunde- und Katzenhalter bei der Umstellung auf frisches Futter.</p>
+    <p>Außerdem bin ich bei den Fellnasen Stuttgart aktiv. Deshalb kenne ich auch die Fragen, die sich stellen, wenn ein Hund aus dem Tierschutz einzieht. Darum geht es in meinem Webinar <a href={href("shop#einzug")}>„Mein Hund zieht ein“</a>.</p>
+    <EigenesFoto slot="medien" name="hilde" alt="Ich lächle in die Kamera, vor mir sitzt meine graue Hündin Nala mit offenem Maul" platzhalter="Ich mit Nala" format="4 / 5" ausschnitt="50% 40%" eager />
   </Seitenkopf>
 
   <section class="wrap familie" aria-labelledby="familie-titel">
-    <h2 id="familie-titel">Bei Hilde zu Hause</h2>
+    <h2 id="familie-titel">Bei mir zu Hause</h2>
     <div class="paar">
       <div class="spalte">
       <figure>
-        <EigenesFoto name="hunde" alt="Hildes drei Hunde sitzen nebeneinander auf der Wiese: links die kleine weiße Patata, in der Mitte Schäferhund-Mischling Heinrich und rechts die graue Nala" platzhalter="Hildes drei Hunde" format="4 / 3" ausschnitt="50% 60%" sizes="(max-width: 760px) 92vw, 560px" />
+        <EigenesFoto name="hunde" alt="Meine drei Hunde sitzen nebeneinander auf der Wiese: links die kleine weiße Patata, in der Mitte Schäferhund-Mischling Heinrich und rechts die graue Nala" platzhalter="Meine drei Hunde" format="4 / 3" ausschnitt="50% 60%" sizes="(max-width: 760px) 92vw, 560px" />
         <figcaption>„Das sind meine drei Hunde.“</figcaption>
       </figure>
       <dl class="tiere">
@@ -39,7 +39,7 @@ const werte = [
       </div>
       <div class="spalte">
       <figure>
-        <EigenesFoto name="katzen" alt="Hildes zwei Katzen kuscheln auf dem Kratzbaum, vorne das Kätzchen Helmut, hinten die schwarz-weiße Erika" platzhalter="Hildes zwei Katzen" format="4 / 3" ausschnitt="50% 58%" sizes="(max-width: 760px) 92vw, 560px" />
+        <EigenesFoto name="katzen" alt="Meine zwei Katzen kuscheln auf dem Kratzbaum, vorne das Kätzchen Helmut, hinten die schwarz-weiße Erika" platzhalter="Meine zwei Katzen" format="4 / 3" ausschnitt="50% 58%" sizes="(max-width: 760px) 92vw, 560px" />
         <figcaption>„Und das meine zwei Katzen.“</figcaption>
       </figure>
       <dl class="tiere">
@@ -56,11 +56,11 @@ const werte = [
 
   <section class="wrap werte">
     <figure class="werte-foto">
-      <EigenesFoto name="nala-und-hilde" alt="Hilde lacht im Hintergrund, vorne schaut ihre graue Hündin Nala mit offenem Maul zur Seite" platzhalter="Hilde mit Nala" format="4 / 5" ausschnitt="50% 12%" sizes="(max-width: 900px) 92vw, 440px" />
+      <EigenesFoto name="nala-und-hilde" alt="Ich lache im Hintergrund, vorne schaut meine graue Hündin Nala mit offenem Maul zur Seite" platzhalter="Nala und ich" format="4 / 5" ausschnitt="50% 12%" sizes="(max-width: 900px) 92vw, 440px" />
       <figcaption>„Nala und ich.“</figcaption>
     </figure>
     <div class="werte-text">
-      <h2>Wie Hilde arbeitet</h2>
+      <h2>Wie ich arbeite</h2>
       <dl>
         {werte.map((w) => (
           <div>
@@ -69,7 +69,7 @@ const werte = [
           </div>
         ))}
       </dl>
-      <a class="knopf" href={href("anfrage")}>Hilde schreiben</a>
+      <a class="knopf" href={href("anfrage")}>Schreib mir</a>
     </div>
   </section>
 </Base>

@@ -42,7 +42,7 @@ export const plaene: Plan[] = [
     id: "gesundheit",
     name: "BARF-Plan Gesundheit",
     fuer: "Hunde und Katzen mit Vorerkrankungen",
-    text: "Bei Erkrankungen von Nieren, Leber, Bauchspeicheldrüse, Haut oder Herz braucht der Napf besondere Aufmerksamkeit. Hilde stimmt den Plan auf die Diagnose ab, gern zusammen mit deiner Tierarztpraxis.",
+    text: "Bei Erkrankungen von Nieren, Leber, Bauchspeicheldrüse, Haut oder Herz braucht der Napf besondere Aufmerksamkeit. Ich stimme den Plan auf die Diagnose ab, gern zusammen mit deiner Tierarztpraxis.",
     inhalt: ["Zusammenstellung passend zur Diagnose", "Berücksichtigung von Blutwerten und Medikamenten", "Abstimmung mit der Tierarztpraxis auf Wunsch"],
     preis: 200,
     bis: 265,
@@ -78,7 +78,7 @@ export const plaene: Plan[] = [
 /** Zusatzleistungen zu einem bestehenden Plan (Preise wie barfmaddi.de, Stand 2026-11) */
 export const zusatz = [
   { name: "Plananpassung", text: "Einfache Anpassung eines bestehenden Plans, z. B. nach einer Gewichtsänderung.", preis: "50 €" },
-  { name: "Betreuung verlängern", text: "Hilde bleibt länger an deiner Seite und beantwortet Fragen zum Plan.", preis: "2 Wochen 80 € · 4 Wochen 120 € · 3 Monate 250 €" },
+  { name: "Betreuung verlängern", text: "Ich bleibe länger an deiner Seite und beantworte Fragen zum Plan.", preis: "2 Wochen 80 € · 4 Wochen 120 € · 3 Monate 250 €" },
 ];
 
 export type Leistung = { id: string; name: string; text: string; punkte?: string[] };
@@ -87,13 +87,13 @@ export const leistungen: Leistung[] = [
   {
     id: "beratung",
     name: "1:1-Beratung",
-    text: "Wenn du über den Plan hinaus Fragen hast, nehmt ihr euch in einem persönlichen Gespräch Zeit dafür. Ob Umstellung, Fütterung im Urlaub oder eine Katze, die plötzlich mäkelt: Es gibt keine falschen Fragen.",
+    text: "Wenn du über den Plan hinaus Fragen hast, nehmen wir uns in einem persönlichen Gespräch Zeit dafür. Ob Umstellung, Fütterung im Urlaub oder eine Katze, die plötzlich mäkelt: Es gibt keine falschen Fragen.",
     punkte: ["Gespräch per Telefon oder Video", "Vorher ein kurzer Fragebogen", "Zusammenfassung zum Nachlesen"],
   },
   {
     id: "analyse",
     name: "Ernährungsanalyse",
-    text: "Du fütterst schon und willst wissen, ob alles passt? Hilde rechnet deine aktuelle Fütterung nach und zeigt dir, wo etwas fehlt oder zu viel ist, ohne dass du gleich alles umwerfen musst.",
+    text: "Du fütterst schon und willst wissen, ob alles passt? Ich rechne deine aktuelle Fütterung nach und zeige dir, wo etwas fehlt oder zu viel ist, ohne dass du gleich alles umwerfen musst.",
     punkte: ["Auswertung deiner jetzigen Rationen", "Konkrete Vorschläge zum Nachbessern"],
   },
   {
@@ -110,7 +110,7 @@ export const leistungen: Leistung[] = [
 
 export const ablauf = [
   { titel: "Fragebogen", text: "Du erzählst von deinem Hund oder deiner Katze: Alter, Gewicht, Alltag, Vorlieben und was nicht vertragen wird." },
-  { titel: "Rechnen", text: "Hilde stellt die Ration zusammen und prüft Nährstoffe, Kalzium und Energie." },
+  { titel: "Rechnen", text: "Ich stelle die Ration zusammen und prüfe Nährstoffe, Kalzium und Energie." },
   { titel: "Dein Plan", text: "Du bekommst Mengen, Rezepte und Einkaufsliste, verständlich und zum Ausdrucken." },
-  { titel: "Nachfragen", text: "Läuft etwas nicht rund, passt Hilde den Plan an." },
+  { titel: "Nachfragen", text: "Läuft etwas nicht rund, passe ich den Plan an." },
 ];

@@ -56,7 +56,7 @@ const id = `nl-${quelle.toLowerCase().replace(/[^a-z]+/g, "-")}`;
       }
       const ziel = form.dataset.ziel;
       if (!ziel) {
-        status.textContent = "Die Anmeldung wird freigeschaltet, sobald Hildes Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
+        status.textContent = "Die Anmeldung wird freigeschaltet, sobald meine Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
         return;
       }
       const daten = Object.fromEntries([...new FormData(form).entries()].filter(([, v]) => String(v).trim() !== ""));
@@ -78,7 +78,7 @@ const id = `nl-${quelle.toLowerCase().replace(/[^a-z]+/g, "-")}`;
         const antwort = await res.json().catch(() => ({}));
         if (!res.ok || String(antwort.success) !== "true") throw new Error();
         form.reset();
-        status.textContent = "Danke! Hilde schickt dir noch eine E-Mail, mit der du die Anmeldung bestätigst.";
+        status.textContent = "Danke! Ich schicke dir noch eine E-Mail, mit der du die Anmeldung bestätigst.";
       } catch {
         status.textContent = "Das hat leider nicht geklappt. Bitte versuch es gleich noch einmal.";
       } finally {

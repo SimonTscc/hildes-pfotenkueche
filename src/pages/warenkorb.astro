@@ -20,13 +20,13 @@ import { href } from "../lib/url";
           <span>Gesamt</span>
           <b data-summe></b>
         </div>
-        {isPreview && <p class="leise">Vorschau: Die Preise sind Platzhalter, bis Hilde ihre Preise festlegt.</p>}
+        {isPreview && <p class="leise">Vorschau: Die Preise sind Platzhalter, bis ich meine Preise festlege.</p>}
         <p><a class="textlink" href={href("shop")}>Weiter einkaufen</a></p>
       </div>
 
       <div data-danke hidden tabindex="-1" class="danke">
         <p class="gross">Danke für deine Bestellung!</p>
-        <p>Hilde schickt dir in den nächsten Tagen eine Bestätigung mit den Zahlungsdaten. Sobald die Zahlung da ist, bekommst du den Zugang zum Webinar beziehungsweise deinen Plan als PDF per E-Mail.</p>
+        <p>Ich schicke dir in den nächsten Tagen eine Bestätigung mit den Zahlungsdaten. Sobald die Zahlung da ist, bekommst du den Zugang zum Webinar beziehungsweise deinen Plan als PDF per E-Mail.</p>
         <p><a class="textlink" href={href()}>Zur Startseite</a></p>
       </div>
     </section>
@@ -48,10 +48,10 @@ import { href } from "../lib/url";
         <legend>Bezahlen</legend>
         <label class="wahl"><input type="radio" name="Zahlung" value="Überweisung" checked /> Überweisung</label>
         <label class="wahl"><input type="radio" name="Zahlung" value="PayPal" /> PayPal</label>
-        <span class="hinweis">Die Zahlungsdaten bekommst du mit der Bestätigung von Hilde.</span>
+        <span class="hinweis">Die Zahlungsdaten bekommst du mit meiner Bestätigung.</span>
       </fieldset>
 
-      <label>Nachricht an Hilde (freiwillig)<textarea name="Nachricht" rows="3"></textarea></label>
+      <label>Nachricht an mich (freiwillig)<textarea name="Nachricht" rows="3"></textarea></label>
 
       <div class="haken-gruppe">
         <label class="haken" data-widerruf hidden>
@@ -155,7 +155,7 @@ import { href } from "../lib/url";
     if (!posten.length) return;
     const ziel = seite.dataset.ziel;
     if (!ziel) {
-      status.textContent = "Bestellen geht, sobald Hildes Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
+      status.textContent = "Bestellen geht, sobald meine Kontaktadresse eingetragen ist. Bis dahin ist das eine Vorschau.";
       return;
     }
     // Leere freiwillige Felder nicht mitschicken, damit die Mail an Hilde übersichtlich bleibt
@@ -190,7 +190,7 @@ import { href } from "../lib/url";
     } catch {
       const mail = seite.dataset.mail;
       status.textContent = mail
-        ? `Das hat leider nicht geklappt. Schreib Hilde gern direkt an ${mail}, dein Warenkorb bleibt gespeichert.`
+        ? `Das hat leider nicht geklappt. Schreib mir gern direkt an ${mail}, dein Warenkorb bleibt gespeichert.`
         : "Das hat leider nicht geklappt. Dein Warenkorb bleibt gespeichert, bitte versuch es gleich noch einmal.";
     } finally {
       knopf.disabled = false;
