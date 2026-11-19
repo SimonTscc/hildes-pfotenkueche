@@ -25,13 +25,13 @@ const werte = [
     <div class="paar">
       <div class="spalte">
       <figure>
-        <EigenesFoto name="hunde" alt="Hildes drei Hunde sitzen nebeneinander auf der Wiese: ein kleiner weißer Hund, ein Schäferhund-Mischling und ein grauer Hund" platzhalter="Hildes drei Hunde" format="4 / 3" ausschnitt="50% 60%" sizes="(max-width: 760px) 92vw, 560px" />
+        <EigenesFoto name="hunde" alt="Hildes drei Hunde sitzen nebeneinander auf der Wiese: links die kleine weiße Patata, in der Mitte Schäferhund-Mischling Heinrich und rechts die graue Nala" platzhalter="Hildes drei Hunde" format="4 / 3" ausschnitt="50% 60%" sizes="(max-width: 760px) 92vw, 560px" />
         <figcaption>„Das sind meine drei Hunde.“</figcaption>
       </figure>
       <dl class="tiere">
         {hunde.map((t) => (
           <div>
-            <dt>{t.name}{t.zusatz && <span class="zusatz"> ({t.zusatz})</span>}</dt>
+            <dt>{t.name}{(t.imBild || t.zusatz) && <span class="zusatz"> ({[t.imBild, t.zusatz].filter(Boolean).join(", ")})</span>}</dt>
             <dd class:list={{ folgt: !t.text }}>{t.text || "Text folgt."}</dd>
           </div>
         ))}
@@ -39,13 +39,13 @@ const werte = [
       </div>
       <div class="spalte">
       <figure>
-        <EigenesFoto name="katzen" alt="Hildes zwei Katzen kuscheln auf dem Kratzbaum, die große schwarz-weiße und ein Kätzchen" platzhalter="Hildes zwei Katzen" format="4 / 3" ausschnitt="50% 58%" sizes="(max-width: 760px) 92vw, 560px" />
+        <EigenesFoto name="katzen" alt="Hildes zwei Katzen kuscheln auf dem Kratzbaum, vorne das Kätzchen Helmut, hinten die schwarz-weiße Erika" platzhalter="Hildes zwei Katzen" format="4 / 3" ausschnitt="50% 58%" sizes="(max-width: 760px) 92vw, 560px" />
         <figcaption>„Und das meine zwei Katzen.“</figcaption>
       </figure>
       <dl class="tiere">
         {katzen.map((t) => (
           <div>
-            <dt>{t.name}{t.zusatz && <span class="zusatz"> ({t.zusatz})</span>}</dt>
+            <dt>{t.name}{(t.imBild || t.zusatz) && <span class="zusatz"> ({[t.imBild, t.zusatz].filter(Boolean).join(", ")})</span>}</dt>
             <dd class:list={{ folgt: !t.text }}>{t.text || "Text folgt."}</dd>
           </div>
         ))}
