@@ -16,9 +16,9 @@ const tag = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("de-DE",
 const monat = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("de-DE", { month: "short" }).replace(".", "");
 const wochentag = (d: string) => new Date(`${d}T12:00:00`).toLocaleDateString("de-DE", { weekday: "long" });
 ---
-<Base title="Webinar & Shop" description="Live-Webinare mit mir buchen: BARF verstehen und „Mein Hund zieht ein“, auch für Tierschutzhunde. Dazu der Durchfall-Plan „SOS Durchfall“ als PDF.">
+<Base title="Webinar & Shop" description="Live-Webinare mit mir buchen: BARF verstehen und „Mein Hund oder meine Katze zieht ein“, auch für Tiere aus dem Tierschutz. Dazu der Durchfall-Plan „SOS Durchfall“ als PDF.">
   <Seitenkopf titel="Webinar & Shop" bild={kleinerHund} alt="Meine kleine weiße Hündin Patata schaut fröhlich in die Kamera">
-    <p>Live mit mir: im BARF-Webinar verstehst du, was in den Napf gehört, und in „Mein Hund zieht ein“ bereitest du dich auf deinen neuen Hund vor. Für die Tage, an denen der Bauch rumort, gibt es den Durchfall-Plan direkt zum Herunterladen.</p>
+    <p>Live mit mir: im BARF-Webinar verstehst du, was in den Napf gehört, und in „Mein Hund oder meine Katze zieht ein“ bereitest du dich auf dein neues Tier vor. Für die Tage, an denen der Bauch rumort, gibt es den Durchfall-Plan direkt zum Herunterladen.</p>
     <p class="leise">Einen BARF-Plan für deinen Hund oder deine Katze rechne ich individuell, den bekommst du über die <a href={href("anfrage")}>Anfrage</a>.</p>
   </Seitenkopf>
 

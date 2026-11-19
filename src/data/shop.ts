@@ -47,10 +47,10 @@ export const webinare: Webinar[] = [
   },
   {
     id: "einzug",
-    titel: "Mein Hund zieht ein",
-    untertitel: "Für alle, bei denen bald ein Hund einzieht, auch aus dem Tierschutz",
-    text: "Ein neuer Hund bringt viel Freude und viele Fragen mit. Ich bin auch bei den Fellnasen Stuttgart aktiv und weiß, was in den ersten Wochen zählt, gerade bei Hunden aus dem Tierschutz, die schon einiges hinter sich haben.",
-    punkte: ["Was du vor dem Einzug vorbereiten solltest", "Die ersten Tage und Wochen: Ruhe, Routine, Vertrauen", "Tierschutzhunde: was anders sein kann und worauf du achtest", "Fütterung am Anfang, gerade bei empfindlichem Magen", "Offene Fragerunde am Ende"],
+    titel: "Mein Hund oder meine Katze zieht ein",
+    untertitel: "Für alle, bei denen bald ein Hund oder eine Katze einzieht, auch aus dem Tierschutz",
+    text: "Ein neues Tier bringt viel Freude und viele Fragen mit, ob Hund oder Katze. Ich bin auch bei den Fellnasen Stuttgart aktiv und weiß, was in den ersten Wochen zählt, gerade bei Tieren aus dem Tierschutz, die schon einiges hinter sich haben.",
+    punkte: ["Was du vor dem Einzug vorbereiten solltest", "Die ersten Tage und Wochen: Ruhe, Routine, Vertrauen", "Tiere aus dem Tierschutz: was anders sein kann und worauf du achtest", "Fütterung am Anfang, gerade bei empfindlichem Magen", "Offene Fragerunde am Ende"],
     dauer: "etwa 90 Minuten", // [SWAP]
     ort: "online per Zoom, den Link bekommst du per E-Mail", // [SWAP] Plattform
     preis: 29, // [SWAP]
